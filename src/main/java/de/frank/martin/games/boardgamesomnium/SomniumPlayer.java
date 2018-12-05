@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static de.frank.martin.games.boardgamesomnium.SomniumCommand.*;
 import static de.frank.martin.games.boardgamesomnium.SomniumUtil.getMax;
 
 public class SomniumPlayer extends BasePlayer<SomniumGame> {
@@ -29,10 +30,8 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
         somniumGame.startPlayersTurn();
         somniumGame.drawCard();
 
-        while (somniumGame.getPossibleCommands().contains(SomniumCommand.DRAW) ||
-                somniumGame.getPossibleCommands().contains(SomniumCommand.STEAL)) {
-
-            if (somniumGame.getPossibleCommands().contains(SomniumCommand.STEAL)) {
+        while (somniumGame.getPossibleCommands().contains(DRAW) || somniumGame.getPossibleCommands().contains(STEAL)) {
+            if (somniumGame.getPossibleCommands().contains(STEAL)) {
                 List<SomniumCard.CardColor> exclusiveColors =
                         new ArrayList<>(Arrays.asList(SomniumCard.CardColor.values()));
                 exclusiveColors.removeAll(somniumGame.getOpenStack().stream().
@@ -110,11 +109,7 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
     }
 
     private int getScore(List<SomniumCard> cards) {
-        int sum = 0;
-        for (SomniumCard.CardColor color : SomniumCard.CardColor.values()) {
-            Integer value = getMax(cards, color);
-            sum = sum + value;
-        }
-        return sum;
+        return Arrays.stream(SomniumCard.CardColor.values()).
+                map(color -> getMax(cards, color)).mapToInt(value -> value).sum();
     }
 }

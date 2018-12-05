@@ -29,8 +29,6 @@ public class SomniumCard  {
 
     @Override
     public String toString() {
-        String value = getValue() == null?getCardType().toString():Integer.toString(getValue());
-        String color = getCardColor()== null?"XXX":getCardColor().toString();
-        return color+"/"+value;
+        return SomniumUtil.getCardColor(this)+"/"+SomniumUtil.getCardValue(this);
     }
 }

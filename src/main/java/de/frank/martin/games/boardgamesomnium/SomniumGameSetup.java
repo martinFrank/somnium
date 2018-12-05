@@ -17,6 +17,6 @@ public class SomniumGameSetup implements BoardGameSetup<SomniumPlayer>  {
 
     @Override
     public int getMaximumRounds() {
-        return 10;
+        return 0;
     }
 }
