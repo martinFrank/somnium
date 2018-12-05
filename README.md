@@ -1,8 +1,5 @@
 # somnium
-somnium is a card game - it was implemented to test the board game lib
-
-it's the classical game from the Civ4Mod Fall from Heaven...
-
+somnium is a card game - the idea comes from the Mod 'Fall From Heaven II' for the classical game Civilatzion 4
 
 ```
  CPU     :17
@@ -31,5 +28,6 @@ it's the classical game from the Civ4Mod Fall from Heaven...
 ```
 
 ## Feature:
- * AI Player (not so bad)
+ * working AI Player (not so bad)
+ * random starting position
  * this implementation is text-based
