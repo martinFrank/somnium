@@ -1,9 +1,8 @@
 # somnium
-somnium is a crad game - it was implemented to test the board game lib
+somnium is a card game - it was implemented to test the board game lib
 
 it's the classical game from the Civ4Mod Fall from Heaven...
 
-this implementation is text-based
 
 ```
  CPU     :17
@@ -30,3 +29,7 @@ this implementation is text-based
 +--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+
  possible commands [DONE, DRAW, SHOW, EXIT] for player YOU
 ```
+
+## Feature:
+ * AI Player (not so bad)
+ * this implementation is text-based
