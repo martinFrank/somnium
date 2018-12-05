@@ -1,5 +1,5 @@
-# somnium
-somnium is a card game - the idea comes from the Mod 'Fall From Heaven II' for the classical game Civilatzion 4
+# Somnium
+Somnium is a card game - the idea comes from the Mod 'Fall From Heaven II' for the classical game Civilatzion 4
 
 ```
  CPU     :17
@@ -32,5 +32,5 @@ somnium is a card game - the idea comes from the Mod 'Fall From Heaven II' for t
  * random starting position
  * this implementation is text-based
 
-##requires 
+## requires 
  * [boardgamelib](https://github.com/martinFrank/boardgamelib)
