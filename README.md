@@ -31,3 +31,6 @@ somnium is a card game - the idea comes from the Mod 'Fall From Heaven II' for t
  * working AI Player (not so bad)
  * random starting position
  * this implementation is text-based
+
+##requires 
+ * [boardgamelib](https://github.com/martinFrank/boardgamelib)
