@@ -5,6 +5,7 @@ it's the classical game from the Civ4Mod Fall from Heaven...
 
 this implementation is text-based
 
+```
  CPU     :17
 +--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+
 |ANGEL   |SUN     |WAND    |CUP     |TOWER   |SWORD   |DRAGON  |PENTACLE|MOON    |DEMON   |
@@ -28,4 +29,4 @@ this implementation is text-based
 |0       |2       |6       |4       |0       |1       |0       |7       |0       |0       |
 +--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+
  possible commands [DONE, DRAW, SHOW, EXIT] for player YOU
-
+```
