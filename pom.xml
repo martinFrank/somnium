@@ -41,6 +41,11 @@
           <version>1.0-SNAPSHOT</version>
           <scope>compile</scope>
       </dependency>
+      <dependency>
+          <groupId>de.elite.games</groupId>
+          <artifactId>cli</artifactId>
+          <version>1.0-SNAPSHOT</version>
+      </dependency>
   </dependencies>
 
   <build>

@@ -4,19 +4,13 @@ import java.io.PrintStream;
 
 import static de.frank.martin.games.boardgamesomnium.SomniumUtil.*;
 
-class SomniumGamePrinter {
+public class SomniumGamePrinter {
 
-    private final SomniumGame somniumGame;
-
-    SomniumGamePrinter(SomniumGame somniumGame) {
-        this.somniumGame = somniumGame;
-    }
-
-    void printGame(PrintStream out) {
-        out.println();
-        out.println();
-        out.println();
-        out.println();
+    public static void printGame(PrintStream out, SomniumGame somniumGame) {
+//        out.println();
+//        out.println();
+//        out.println();
+//        out.println();
         out.println();
         SomniumPlayer topPlayer = somniumGame.getPlayers().get(0);
         SomniumPlayer bottomPlayer = somniumGame.getPlayers().get(1);
@@ -24,14 +18,14 @@ class SomniumGamePrinter {
         printCardColors(out);
         printCardValues(out, topPlayer);
         out.println("\n");
-        printTable(out);
+        printTable(out, somniumGame);
         out.println("\n");
         out.println(" "+format(bottomPlayer.getName()) + ":" + bottomPlayer.getScore());
         printCardColors(out);
         printCardValues(out, bottomPlayer);
     }
 
-    private void printTable(PrintStream out) {
+    private static void printTable(PrintStream out, SomniumGame somniumGame) {
         out.println(" "+format("Table") + ":" + somniumGame.getClosedStack().size() + " cards left");
         out.println(getTableLine(somniumGame.getOpenStack().size()));
         somniumGame.getOpenStack().stream().
@@ -44,7 +38,7 @@ class SomniumGamePrinter {
         out.println(getTableLine(somniumGame.getOpenStack().size()));
     }
 
-    private void printCardValues(PrintStream out, SomniumPlayer player) {
+    private static void printCardValues(PrintStream out, SomniumPlayer player) {
         for (SomniumCard.CardColor color : SomniumCard.CardColor.values()) {
             out.print("|" + format(Integer.toString(getMax(player.getCards(), color))));
         }
@@ -53,7 +47,7 @@ class SomniumGamePrinter {
     }
 
 
-    private void printCardColors(PrintStream out) {
+    private static void printCardColors(PrintStream out) {
         out.println(getFullTableLine());
         for (SomniumCard.CardColor color : SomniumCard.CardColor.values()) {
             out.print("|" + format(color.toString()));
@@ -62,8 +56,8 @@ class SomniumGamePrinter {
         out.println(getFullTableLine());
     }
 
-    void printResults(PrintStream out) {
-        printGame(out);
+    public static void printResults(PrintStream out, SomniumGame somniumGame) {
+        printGame(out, somniumGame);
         out.println();
         out.println();
         out.println("--------------------------------------------------------");

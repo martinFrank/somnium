@@ -1,16 +1,15 @@
 package de.frank.martin.games.boardgamesomnium;
 
+import de.elite.games.cli.Command;
 import de.frank.martin.games.boardgamelib.BasePlayer;
+import de.frank.martin.games.boardgamesomnium.command.DrawCommand;
+import de.frank.martin.games.boardgamesomnium.command.StealCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static de.frank.martin.games.boardgamesomnium.SomniumCommand.*;
 import static de.frank.martin.games.boardgamesomnium.SomniumUtil.getMax;
 
 public class SomniumPlayer extends BasePlayer<SomniumGame> {
@@ -30,8 +29,10 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
         somniumGame.startPlayersTurn();
         somniumGame.drawCard();
 
-        while (somniumGame.getPossibleCommands().contains(DRAW) || somniumGame.getPossibleCommands().contains(STEAL)) {
-            if (somniumGame.getPossibleCommands().contains(STEAL)) {
+//        Set<Command<SomniumGame>> commands = somniumGame.getCommands();
+
+        while (hasOptions(somniumGame.getCommands())) {
+            if (hasOptionSteal(somniumGame.getCommands())) {
                 List<SomniumCard.CardColor> exclusiveColors =
                         new ArrayList<>(Arrays.asList(SomniumCard.CardColor.values()));
                 exclusiveColors.removeAll(somniumGame.getOpenStack().stream().
@@ -72,6 +73,18 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
             }
         }
         somniumGame.endPlayersTurn();
+    }
+
+    private boolean hasOptions(Set<Command<SomniumGame>> commands) {
+        return hasOptionSteal(commands) || hasOptionDraw(commands);
+    }
+
+    private boolean hasOptionSteal(Set<Command<SomniumGame>> commands) {
+        return commands.stream().anyMatch(e -> e.isIdentifier(StealCommand.IDENTIFIER));
+    }
+
+    private boolean hasOptionDraw(Set<Command<SomniumGame>> commands) {
+        return commands.stream().anyMatch(e -> e.isIdentifier(DrawCommand.IDENTIFIER));
     }
 
     private SomniumCard.CardColor getBestColorFromOpponent(SomniumGame somniumGame, List<SomniumCard.CardColor> possibleColors) {
