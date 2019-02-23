@@ -2,7 +2,7 @@ package de.frank.martin.games.boardgamesomnium;
 
 import de.elite.games.cli.CommandLineInterface;
 
-public class App {
+class App {
 
     public static void main(String[] args){
         SomniumGame somniumGame = new SomniumGame();

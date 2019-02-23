@@ -14,11 +14,13 @@ import static de.frank.martin.games.boardgamesomnium.SomniumUtil.getMax;
 
 public class SomniumPlayer extends BasePlayer<SomniumGame> {
 
-    private static Logger LOG = LoggerFactory.getLogger(BasePlayer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BasePlayer.class);
+    private final DrawCommand drawCommand = new DrawCommand();
+    private final StealCommand stealCommand = new StealCommand();
 
-    private final List<SomniumCard> cards = new ArrayList<>();
+    private SomniumCardDeck cards = new SomniumCardDeck();
 
-    public SomniumPlayer(String name, int color, boolean isHuman) {
+    SomniumPlayer(String name, int color, boolean isHuman) {
         super(name, color, isHuman);
     }
 
@@ -28,8 +30,6 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
         SomniumGame somniumGame = getBoardGame();
         somniumGame.startPlayersTurn();
         somniumGame.drawCard();
-
-//        Set<Command<SomniumGame>> commands = somniumGame.getCommands();
 
         while (hasOptions(somniumGame.getCommands())) {
             if (hasOptionSteal(somniumGame.getCommands())) {
@@ -80,18 +80,18 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
     }
 
     private boolean hasOptionSteal(Set<Command<SomniumGame>> commands) {
-        return commands.stream().anyMatch(e -> e.isIdentifier(StealCommand.IDENTIFIER));
+        return commands.stream().anyMatch(stealCommand::equals);
     }
 
     private boolean hasOptionDraw(Set<Command<SomniumGame>> commands) {
-        return commands.stream().anyMatch(e -> e.isIdentifier(DrawCommand.IDENTIFIER));
+        return commands.stream().anyMatch(drawCommand::equals);
     }
 
     private SomniumCard.CardColor getBestColorFromOpponent(SomniumGame somniumGame, List<SomniumCard.CardColor> possibleColors) {
         int max = -1;
         SomniumCard.CardColor target = null;
         for (SomniumCard.CardColor color : possibleColors) {
-            Integer value = getMax(somniumGame.getVictim().getCards(), color);
+            Integer value = getMax(somniumGame.getVictim().getCards().getCards(), color);
             if (value > max) {
                 max = value;
                 target = color;
@@ -102,27 +102,32 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
 
 
     private int getDeltaFromOpenStack(SomniumGame somniumGame) {
-        List<SomniumCard> currentCards = new ArrayList<>(getCards());
-        int current = getScore(currentCards);
+        SomniumCardDeck currentCards = new SomniumCardDeck();
+        int current = currentCards.getScore();
         currentCards.addAll(somniumGame.getOpenStack());
-        int after = getScore(currentCards);
+        int after = currentCards.getScore();
         return after - current;
     }
 
-    public List<SomniumCard> getCards() {
+    SomniumCardDeck getCards() {
         return cards;
     }
 
-    public void addCards(List<SomniumCard> openCards) {
+    void addCards(SomniumCardDeck openCards) {
         cards.addAll(openCards);
     }
 
+
     public int getScore() {
-        return getScore(getCards());
+        return cards.getScore();
     }
 
-    private int getScore(List<SomniumCard> cards) {
-        return Arrays.stream(SomniumCard.CardColor.values()).
-                map(color -> getMax(cards, color)).mapToInt(value -> value).sum();
+    public Optional<SomniumCard> steal(SomniumCard.CardColor color) {
+        return cards.getCards().stream().filter(c -> color.equals(c.getCardColor())).
+                max(Comparator.comparing(SomniumCard::getValue));
+    }
+
+    public void remove(SomniumCard somniumCard) {
+        getCards().remove(somniumCard);
     }
 }

@@ -7,10 +7,6 @@ import static de.frank.martin.games.boardgamesomnium.SomniumUtil.*;
 public class SomniumGamePrinter {
 
     public static void printGame(PrintStream out, SomniumGame somniumGame) {
-//        out.println();
-//        out.println();
-//        out.println();
-//        out.println();
         out.println();
         SomniumPlayer topPlayer = somniumGame.getPlayers().get(0);
         SomniumPlayer bottomPlayer = somniumGame.getPlayers().get(1);
@@ -26,7 +22,7 @@ public class SomniumGamePrinter {
     }
 
     private static void printTable(PrintStream out, SomniumGame somniumGame) {
-        out.println(" "+format("Table") + ":" + somniumGame.getClosedStack().size() + " cards left");
+        out.println(" " + format("Table") + ":" + somniumGame.getClosedDeck().size() + " cards left");
         out.println(getTableLine(somniumGame.getOpenStack().size()));
         somniumGame.getOpenStack().stream().
                 map(card -> "|" + format(getCardColor(card))).forEach(out::print);
@@ -40,7 +36,7 @@ public class SomniumGamePrinter {
 
     private static void printCardValues(PrintStream out, SomniumPlayer player) {
         for (SomniumCard.CardColor color : SomniumCard.CardColor.values()) {
-            out.print("|" + format(Integer.toString(getMax(player.getCards(), color))));
+            out.print("|" + format(Integer.toString(getMax(player.getCards().getCards(), color))));
         }
         out.println("|");
         out.println(getFullTableLine());

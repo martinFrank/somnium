@@ -9,12 +9,9 @@ import java.util.List;
 
 public class DrawCommand extends Command<SomniumGame> {
 
-    public static final String IDENTIFIER = "draw";
-
     public DrawCommand() {
-        super(IDENTIFIER);
+        super("draw");
     }
-
 
     @Override
     public Response execute(SomniumGame somniumGame, List<String> list) {

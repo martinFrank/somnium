@@ -2,29 +2,36 @@ package de.frank.martin.games.boardgamesomnium;
 
 public class SomniumCard  {
 
+
     public enum CardColor {ANGEL, SUN, WAND, CUP, TOWER, SWORD, DRAGON, PENTACLE, MOON, DEMON}
+
     public enum CardType{ NUMBER, FOOL, THIEF}
 
-    private CardColor cardColor;
-    private CardType cardType;
-    private Integer value;
+    private final CardColor cardColor;
 
-    public SomniumCard(CardColor cardColor, CardType cardType, Integer value){
+    private final CardType cardType;
+    private final Integer value;
+
+    SomniumCard(CardColor cardColor, CardType cardType, Integer value) {
         this.cardColor = cardColor;
         this.cardType = cardType;
         this.value = value;
     }
 
-    public CardColor getCardColor() {
+    CardColor getCardColor() {
         return cardColor;
     }
 
-    public CardType getCardType() {
+    CardType getCardType() {
         return cardType;
     }
 
-    public Integer getValue() {
+    Integer getValue() {
         return value;
+    }
+
+    public boolean isType(CardType type) {
+        return getCardType() == type;
     }
 
     @Override

@@ -4,16 +4,18 @@ import java.util.List;
 
 class SomniumUtil {
 
+    private final static int LENGTH_SHORT = 8;
+
     private SomniumUtil(){
 
     }
 
     static String format(String str) {
-        return format(str, 8);
+        return format(str, LENGTH_SHORT);
     }
 
-    static String format(String str, int length) {
-        StringBuffer sb = new StringBuffer(str);
+    private static String format(String str, int length) {
+        StringBuilder sb = new StringBuilder(str);
         while(sb.length()<length){
             sb.append(" ");
         }
@@ -22,7 +24,7 @@ class SomniumUtil {
 
     static Integer getMax(List<SomniumCard> cards, SomniumCard.CardColor color) {
         Integer max = 0;
-        for (SomniumCard card: cards ){
+        for (SomniumCard card : cards) {
             if (card.getCardColor() == color && card.getValue() > max){
                 max = card.getValue();
             }
@@ -38,7 +40,7 @@ class SomniumUtil {
     }
 
     static String getTableLine(int amount){
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < amount; i++) {
             sb.append("+--------");
         }

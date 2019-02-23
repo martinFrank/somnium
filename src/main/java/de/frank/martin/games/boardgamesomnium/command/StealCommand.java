@@ -11,10 +11,9 @@ import java.util.List;
 public class StealCommand extends Command<SomniumGame> {
 
 
-    public static final String IDENTIFIER = "steal";
 
     public StealCommand() {
-        super(IDENTIFIER);
+        super("steal");
     }
 
 
