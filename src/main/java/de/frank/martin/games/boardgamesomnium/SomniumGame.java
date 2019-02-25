@@ -7,7 +7,10 @@ import de.frank.martin.games.boardgamelib.BaseBoardGame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static de.frank.martin.games.boardgamesomnium.SomniumCard.CardType.FOOL;
 import static de.frank.martin.games.boardgamesomnium.SomniumCard.CardType.THIEF;
@@ -52,18 +55,18 @@ public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements Command
         SomniumCard card = closedStack.drawCard();
         LOGGER.debug("{} has been drawn", card);
         openStack.add(card);
-        checkFail(card);
+        checkFail();
     }
 
-    private void checkFail(SomniumCard card) {
-        if (card.isType(FOOL)) {
-            LOGGER.debug("FOOL has been drawn, your turn is over", card);
+    //@VisibleForTesting
+    void checkFail() {
+        if (openStack.isCardOpen(FOOL)) {
+            LOGGER.debug("FOOL has been drawn, your turn is over");
             isTurnFailed = true;
             return;
         }
-        Set<SomniumCard.CardColor> colors = new HashSet<>();
-        if (openStack.containsColor(card.getCardColor())) {
-            LOGGER.debug("Duplicate card color has been drawn, your turn is over", card);
+        if (!openStack.areColorsUnique()) {
+            LOGGER.debug("Duplicate card color has been drawn, your turn is over");
             isTurnFailed = true;
         }
     }
@@ -76,20 +79,25 @@ public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements Command
         return isTurnFailed;
     }
 
-    public void steal(SomniumCard.CardColor color) {
+
+    public void steal(Optional<SomniumCard> card) {
         openStack.removeLast(); //remove thief
-        SomniumPlayer victim = getVictim();
-        Optional<SomniumCard> card = victim.steal(color);
         if(card.isPresent()){
-            victim.remove(card.get());
-            openStack.add(card.get());
-            checkFail(card.get());
-            LOGGER.debug("{} was stolen from {} and brought back onto the table", card.get(), victim.getName());
+            SomniumPlayer victim = getVictim();
+            Optional<SomniumCard> opt = victim.steal(card.get());
+            if (opt.isPresent()) {
+                LOGGER.debug("{} was stolen from {} and brought back onto the table", opt.get(), victim.getName());
+            } else {
+                LOGGER.debug("no valid card was stolen ...");
+            }
+            openStack.add(opt.get());
+            checkFail();
+
         }
-        LOGGER.debug("no valid card was stolen from {} ", victim.getName());
+
     }
 
-    SomniumPlayer getVictim() {
+    public SomniumPlayer getVictim() {
         if(getPlayers().get(0).equals(getCurrent())){
             return getPlayers().get(1);
         }else{
@@ -98,7 +106,6 @@ public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements Command
     }
 
     public boolean allCardsAreDrawn() {
-        //FIXME closedStack AND openStack must be empty???
         return closedStack.isEmpty();
     }
 

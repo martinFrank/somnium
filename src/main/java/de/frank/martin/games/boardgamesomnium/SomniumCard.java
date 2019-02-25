@@ -5,11 +5,12 @@ public class SomniumCard  {
 
     public enum CardColor {ANGEL, SUN, WAND, CUP, TOWER, SWORD, DRAGON, PENTACLE, MOON, DEMON}
 
+
     public enum CardType{ NUMBER, FOOL, THIEF}
 
     private final CardColor cardColor;
-
     private final CardType cardType;
+
     private final Integer value;
 
     SomniumCard(CardColor cardColor, CardType cardType, Integer value) {
@@ -18,10 +19,18 @@ public class SomniumCard  {
         this.value = value;
     }
 
+    SomniumCard(CardType cardType) {
+        if (cardType != CardType.FOOL && cardType != CardType.THIEF) {
+            throw new IllegalArgumentException("invalid constructor - only FOOL/THIEF allowed");
+        }
+        this.cardColor = null;
+        this.cardType = cardType;
+        this.value = null;
+    }
+
     CardColor getCardColor() {
         return cardColor;
     }
-
     CardType getCardType() {
         return cardType;
     }
@@ -30,8 +39,29 @@ public class SomniumCard  {
         return value;
     }
 
-    public boolean isType(CardType type) {
-        return getCardType() == type;
+
+    public boolean isMoreValuableThan(SomniumCard card) {
+        if (card == null) {
+            return true;
+        }
+        if (card.cardColor == cardColor) {
+            //FIXME possible NPE
+            return value > card.value;
+        }
+        return false;
+
+    }
+
+    public boolean isMoreValuableThan(int currentValue) {
+        return value > currentValue;
+    }
+
+    public boolean isEqualValuable(int currentValue) {
+        return value == currentValue;
+    }
+
+    public boolean isOfColor(CardColor cardColor) {
+        return this.cardColor == cardColor;
     }
 
     @Override

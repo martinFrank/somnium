@@ -1,6 +1,7 @@
 package de.frank.martin.games.boardgamesomnium;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static de.frank.martin.games.boardgamesomnium.SomniumCard.CardType.*;
@@ -18,8 +19,8 @@ public class SomniumCardDeck {
             }
         }
         for (int i = 0; i < 2; i++) {
-            cards.add(new SomniumCard(null, FOOL, null));
-            cards.add(new SomniumCard(null, THIEF, null));
+            cards.add(new SomniumCard(FOOL));
+            cards.add(new SomniumCard(THIEF));
         }
         return cards;
     }
@@ -58,25 +59,23 @@ public class SomniumCardDeck {
         return deck.stream();
     }
 
-    public boolean containsColor(SomniumCard.CardColor color) {
-        Set<SomniumCard.CardColor> colors = new HashSet<>();
-        for (SomniumCard openCard : deck) {
-            if (colors.contains(openCard.getCardColor())) {
-                return true;
+    public boolean areColorsUnique() {
+        List<SomniumCard.CardColor> colors = new ArrayList<>();
+        for (SomniumCard card : deck) {
+            SomniumCard.CardColor color = card.getCardColor();
+            if (colors.contains(color)) {
+                return false;
             } else {
-                colors.add(openCard.getCardColor());
+                colors.add(color);
             }
         }
-        return false;
+        return true;
     }
 
     public void clear() {
         deck.clear();
     }
 
-    public List<SomniumCard> getCards() {
-        return Collections.unmodifiableList(deck);
-    }
 
     public void addAll(SomniumCardDeck other) {
         deck.addAll(other.deck);
@@ -87,7 +86,48 @@ public class SomniumCardDeck {
                 map(color -> getMax(deck, color)).mapToInt(value -> value).sum();
     }
 
-    public void remove(SomniumCard somniumCard) {
-        deck.remove(somniumCard);
+    public Optional<SomniumCard> remove(SomniumCard somniumCard) {
+        if (deck.contains(somniumCard)) {
+            deck.remove(somniumCard);
+            return Optional.of(somniumCard);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<SomniumCard> getBestCard(SomniumCard.CardColor color) {
+        SomniumCard card = null;
+        for (SomniumCard candidate : allOfColor(color)) {
+            if (candidate.isMoreValuableThan(card)) {
+                card = candidate;
+            }
+        }
+        return card == null ? Optional.empty() : Optional.of(card);
+    }
+
+    public List<SomniumCard> allOfColor(SomniumCard.CardColor cardColor) {
+        return deck.stream().filter(c -> c.isOfColor(cardColor)).collect(Collectors.toList());
+    }
+
+
+    @Override
+    public String toString() {
+        return deck.toString();
+    }
+
+    public List<SomniumCard.CardColor> getRemainingColors() {
+        List<SomniumCard.CardColor> colors = new ArrayList<>(Arrays.asList(SomniumCard.CardColor.values()));
+        colors.removeAll(getColors());
+        return colors;
+    }
+
+    private List<SomniumCard.CardColor> getColors() {
+        List<SomniumCard.CardColor> colors = new ArrayList<>();
+        for (SomniumCard card : deck) {
+            SomniumCard.CardColor color = card.getCardColor();
+            if (!colors.contains(color)) {
+                colors.add(color);
+            }
+        }
+        return colors;
     }
 }

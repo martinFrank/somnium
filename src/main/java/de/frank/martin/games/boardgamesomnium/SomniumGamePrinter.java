@@ -36,7 +36,8 @@ public class SomniumGamePrinter {
 
     private static void printCardValues(PrintStream out, SomniumPlayer player) {
         for (SomniumCard.CardColor color : SomniumCard.CardColor.values()) {
-            out.print("|" + format(Integer.toString(getMax(player.getCards().getCards(), color))));
+            Integer value = player.getBestCard(color).isPresent() ? player.getBestCard(color).get().getValue() : 0;
+            out.print("|" + format(Integer.toString(value)));
         }
         out.println("|");
         out.println(getFullTableLine());

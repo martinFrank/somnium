@@ -7,6 +7,7 @@ import de.frank.martin.games.boardgamesomnium.SomniumGame;
 import de.frank.martin.games.boardgamesomnium.SomniumGamePrinter;
 
 import java.util.List;
+import java.util.Optional;
 
 public class StealCommand extends Command<SomniumGame> {
 
@@ -21,7 +22,8 @@ public class StealCommand extends Command<SomniumGame> {
     public Response execute(SomniumGame somniumGame, List<String> list) {
         try {
             SomniumCard.CardColor color = SomniumCard.CardColor.valueOf(list.get(0));
-            somniumGame.steal(color);
+            Optional<SomniumCard> card = somniumGame.getVictim().getBestCard(color);
+            somniumGame.steal(card);
             SomniumGamePrinter.printGame(System.out, somniumGame);
             return Response.success();
         } catch (RuntimeException e) {

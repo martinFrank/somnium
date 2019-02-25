@@ -8,9 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static de.frank.martin.games.boardgamesomnium.SomniumUtil.getMax;
 
 public class SomniumPlayer extends BasePlayer<SomniumGame> {
 
@@ -33,13 +30,10 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
 
         while (hasOptions(somniumGame.getCommands())) {
             if (hasOptionSteal(somniumGame.getCommands())) {
-                List<SomniumCard.CardColor> exclusiveColors =
-                        new ArrayList<>(Arrays.asList(SomniumCard.CardColor.values()));
-                exclusiveColors.removeAll(somniumGame.getOpenStack().stream().
-                        map(SomniumCard::getCardColor).collect(Collectors.toList()));
-                Collections.shuffle(exclusiveColors);
-                SomniumCard.CardColor color = getBestColorFromOpponent(somniumGame, exclusiveColors);
-                somniumGame.steal(color);
+                List<SomniumCard> bestCards = getBestCardsFromOpponent(somniumGame);
+                Collections.shuffle(bestCards);
+                Optional<SomniumCard> card = bestCards.isEmpty() ? Optional.empty() : Optional.of(bestCards.get(0));
+                somniumGame.steal(card);
             } else {
                 int delta = getDeltaFromOpenStack(somniumGame);
                 if (delta > 7) {
@@ -75,6 +69,32 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
         somniumGame.endPlayersTurn();
     }
 
+    //@VisibleForTest
+    List<SomniumCard> getBestCardsFromOpponent(SomniumGame somniumGame) {
+        List<SomniumCard.CardColor> remaining = somniumGame.getOpenStack().getRemainingColors();
+        SomniumPlayer victim = somniumGame.getVictim();
+        return victim.getBestCards(remaining);
+    }
+
+    private List<SomniumCard> getBestCards(List<SomniumCard.CardColor> colors) {
+        int bestValue = 0;
+        List<SomniumCard> cards = new ArrayList<>();
+        for (SomniumCard.CardColor color : colors) {
+            Optional<SomniumCard> bestOfColor = getBestCard(color);
+            if (bestOfColor.isPresent()) {
+                if (bestOfColor.get().isMoreValuableThan(bestValue)) {
+                    cards.clear();
+                    bestValue = bestOfColor.get().getValue();
+                }
+                if (bestOfColor.get().isEqualValuable(bestValue)) {
+                    cards.add(bestOfColor.get());
+                }
+
+            }
+        }
+        return cards;
+    }
+
     private boolean hasOptions(Set<Command<SomniumGame>> commands) {
         return hasOptionSteal(commands) || hasOptionDraw(commands);
     }
@@ -87,17 +107,17 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
         return commands.stream().anyMatch(drawCommand::equals);
     }
 
-    private SomniumCard.CardColor getBestColorFromOpponent(SomniumGame somniumGame, List<SomniumCard.CardColor> possibleColors) {
-        int max = -1;
-        SomniumCard.CardColor target = null;
+    private SomniumCard getBestCardFromOpponent(SomniumGame somniumGame, List<SomniumCard.CardColor> possibleColors) {
+        SomniumCard card = null;
+        SomniumPlayer victim = somniumGame.getVictim();
         for (SomniumCard.CardColor color : possibleColors) {
-            Integer value = getMax(somniumGame.getVictim().getCards().getCards(), color);
-            if (value > max) {
-                max = value;
-                target = color;
+
+            Optional<SomniumCard> candidate = victim.getBestCard(color);
+            if (candidate.isPresent() && candidate.get().isMoreValuableThan(card)) {
+                card = candidate.get();
             }
         }
-        return target;
+        return card;
     }
 
 
@@ -109,10 +129,6 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
         return after - current;
     }
 
-    SomniumCardDeck getCards() {
-        return cards;
-    }
-
     void addCards(SomniumCardDeck openCards) {
         cards.addAll(openCards);
     }
@@ -122,12 +138,11 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
         return cards.getScore();
     }
 
-    public Optional<SomniumCard> steal(SomniumCard.CardColor color) {
-        return cards.getCards().stream().filter(c -> color.equals(c.getCardColor())).
-                max(Comparator.comparing(SomniumCard::getValue));
+    public Optional<SomniumCard> steal(SomniumCard card) {
+        return cards.remove(card);
     }
 
-    public void remove(SomniumCard somniumCard) {
-        getCards().remove(somniumCard);
+    public Optional<SomniumCard> getBestCard(SomniumCard.CardColor color) {
+        return cards.getBestCard(color);
     }
 }
