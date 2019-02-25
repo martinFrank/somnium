@@ -117,6 +117,10 @@ public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements Command
         return closedStack;
     }
 
+    boolean isGameOver() {
+        return closedStack.isEmpty() && openStack.isEmpty();
+    }
+
     @Override
     public Set<Command<SomniumGame>> getCommands() {
         return commandLineInterpreter.getCommands();
@@ -129,9 +133,5 @@ public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements Command
     @Override
     public Response executeCommand(String identifier, List<String> parameter) {
         return commandLineInterpreter.executeCommand(identifier, parameter);
-    }
-
-    boolean isGameOver() {
-        return closedStack.isEmpty() && openStack.isEmpty();
     }
 }

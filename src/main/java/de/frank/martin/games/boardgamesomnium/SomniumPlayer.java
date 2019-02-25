@@ -76,10 +76,10 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
         return victim.getBestCards(remaining);
     }
 
-    private List<SomniumCard> getBestCards(List<SomniumCard.CardColor> colors) {
+    private List<SomniumCard> getBestCards(List<SomniumCard.CardColor> allowedColors) {
         int bestValue = 0;
         List<SomniumCard> cards = new ArrayList<>();
-        for (SomniumCard.CardColor color : colors) {
+        for (SomniumCard.CardColor color : allowedColors) {
             Optional<SomniumCard> bestOfColor = getBestCard(color);
             if (bestOfColor.isPresent()) {
                 if (bestOfColor.get().isMoreValuableThan(bestValue)) {
@@ -107,19 +107,6 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
         return commands.stream().anyMatch(drawCommand::equals);
     }
 
-    private SomniumCard getBestCardFromOpponent(SomniumGame somniumGame, List<SomniumCard.CardColor> possibleColors) {
-        SomniumCard card = null;
-        SomniumPlayer victim = somniumGame.getVictim();
-        for (SomniumCard.CardColor color : possibleColors) {
-
-            Optional<SomniumCard> candidate = victim.getBestCard(color);
-            if (candidate.isPresent() && candidate.get().isMoreValuableThan(card)) {
-                card = candidate.get();
-            }
-        }
-        return card;
-    }
-
 
     private int getDeltaFromOpenStack(SomniumGame somniumGame) {
         SomniumCardDeck currentCards = new SomniumCardDeck();
@@ -134,11 +121,11 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
     }
 
 
-    public int getScore() {
+    int getScore() {
         return cards.getScore();
     }
 
-    public Optional<SomniumCard> steal(SomniumCard card) {
+    Optional<SomniumCard> steal(SomniumCard card) {
         return cards.remove(card);
     }
 

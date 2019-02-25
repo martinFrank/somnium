@@ -104,7 +104,7 @@ public class SomniumCardDeck {
         return card == null ? Optional.empty() : Optional.of(card);
     }
 
-    public List<SomniumCard> allOfColor(SomniumCard.CardColor cardColor) {
+    private List<SomniumCard> allOfColor(SomniumCard.CardColor cardColor) {
         return deck.stream().filter(c -> c.isOfColor(cardColor)).collect(Collectors.toList());
     }
 
@@ -114,7 +114,7 @@ public class SomniumCardDeck {
         return deck.toString();
     }
 
-    public List<SomniumCard.CardColor> getRemainingColors() {
+    List<SomniumCard.CardColor> getRemainingColors() {
         List<SomniumCard.CardColor> colors = new ArrayList<>(Arrays.asList(SomniumCard.CardColor.values()));
         colors.removeAll(getColors());
         return colors;

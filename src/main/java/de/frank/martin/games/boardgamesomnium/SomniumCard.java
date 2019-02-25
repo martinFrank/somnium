@@ -1,12 +1,22 @@
 package de.frank.martin.games.boardgamesomnium;
 
-public class SomniumCard  {
+public class SomniumCard {
 
 
     public enum CardColor {ANGEL, SUN, WAND, CUP, TOWER, SWORD, DRAGON, PENTACLE, MOON, DEMON}
 
 
-    public enum CardType{ NUMBER, FOOL, THIEF}
+    boolean isMoreValuableThan(SomniumCard card) {
+        if (card == null) {
+            return true;
+        }
+        if (card.cardColor == cardColor) {
+            int current = card.getValue() != null ? card.getValue() : -1;
+            return isMoreValuableThan(current);
+        }
+        return false;
+
+    }
 
     private final CardColor cardColor;
     private final CardType cardType;
@@ -31,6 +41,7 @@ public class SomniumCard  {
     CardColor getCardColor() {
         return cardColor;
     }
+
     CardType getCardType() {
         return cardType;
     }
@@ -39,33 +50,24 @@ public class SomniumCard  {
         return value;
     }
 
-
-    public boolean isMoreValuableThan(SomniumCard card) {
-        if (card == null) {
-            return true;
-        }
-        if (card.cardColor == cardColor) {
-            //FIXME possible NPE
-            return value > card.value;
-        }
-        return false;
-
+    boolean isMoreValuableThan(int currentValue) {
+        int my = value == null ? 0 : value;
+        return my > currentValue;
     }
 
-    public boolean isMoreValuableThan(int currentValue) {
-        return value > currentValue;
+    boolean isEqualValuable(int currentValue) {
+        int my = value == null ? 0 : value;
+        return my == currentValue;
     }
 
-    public boolean isEqualValuable(int currentValue) {
-        return value == currentValue;
-    }
-
-    public boolean isOfColor(CardColor cardColor) {
+    boolean isOfColor(CardColor cardColor) {
         return this.cardColor == cardColor;
     }
 
     @Override
     public String toString() {
-        return SomniumUtil.getCardColor(this)+"/"+SomniumUtil.getCardValue(this);
+        return SomniumUtil.getCardColor(this) + "/" + SomniumUtil.getCardValue(this);
     }
+
+    public enum CardType {NUMBER, FOOL, THIEF}
 }

@@ -32,7 +32,9 @@ public class SomniumGameCommandLineInterpreter extends BaseCommandLineInterprete
             if (getApplication().hasCardsToDraw()) {
                 commands.add(new DrawCommand());
             }
-            commands.add(new EndTurnCommand());
+            if (getApplication().getOpenStack().size() > 0) {
+                commands.add(new EndTurnCommand());
+            }
         }
         return commands;
     }
