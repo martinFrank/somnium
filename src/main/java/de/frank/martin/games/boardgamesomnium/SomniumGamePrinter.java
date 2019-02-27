@@ -24,11 +24,11 @@ public class SomniumGamePrinter {
     private static void printTable(PrintStream out, SomniumGame somniumGame) {
         out.println(" " + format("Table") + ":" + somniumGame.getClosedDeck().size() + " cards left");
         out.println(getTableLine(somniumGame.getOpenDeck().size()));
-        somniumGame.getOpenDeck().stream().
+        somniumGame.getOpenDeck().getCards().stream().
                 map(card -> "|" + format(getCardColor(card))).forEach(out::print);
         out.println("|");
         out.println(getTableLine(somniumGame.getOpenDeck().size()));
-        somniumGame.getOpenDeck().stream().
+        somniumGame.getOpenDeck().getCards().stream().
                 map(card -> "|" +format(getCardValue(card) )).forEach(out::print);
         out.println("|");
         out.println(getTableLine(somniumGame.getOpenDeck().size()));
@@ -36,7 +36,7 @@ public class SomniumGamePrinter {
 
     private static void printCardValues(PrintStream out, SomniumPlayer player) {
         for (SomniumCard.CardColor color : SomniumCard.CardColor.values()) {
-            Integer value = player.getBestCard(color).isPresent() ? player.getBestCard(color).get().getValue() : 0;
+            int value = player.getBestCard(color).isPresent() ? player.getBestCard(color).get().getValue() : 0;
             out.print("|" + format(Integer.toString(value)));
         }
         out.println("|");

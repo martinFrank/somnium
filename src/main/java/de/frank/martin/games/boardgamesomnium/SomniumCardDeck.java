@@ -2,7 +2,6 @@ package de.frank.martin.games.boardgamesomnium;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static de.frank.martin.games.boardgamesomnium.SomniumCard.CardType.*;
 import static de.frank.martin.games.boardgamesomnium.SomniumUtil.getMax;
@@ -53,10 +52,6 @@ public class SomniumCardDeck {
 
     public void removeLast() {
         deck.remove(deck.size() - 1);
-    }
-
-    public Stream<SomniumCard> stream() {
-        return deck.stream();
     }
 
     public boolean areColorsUnique() {
@@ -129,5 +124,9 @@ public class SomniumCardDeck {
             }
         }
         return colors;
+    }
+
+    public List<SomniumCard> getCards() {
+        return deck;
     }
 }

@@ -35,6 +35,7 @@ public class StealTest {
 
         Assert.assertEquals(7, before - after);
         Assert.assertEquals(1, somniumGame.getOpenDeck().size()); // should be on the desk now
+        Assert.assertTrue(somniumGame.getOpenDeck().getCards().contains(PredefinedCards.ANGEL_SEVEN));
     }
 
     @Test
@@ -66,6 +67,7 @@ public class StealTest {
         int after = victim.getScore();
 
         Assert.assertEquals(7, before - after);
-        Assert.assertEquals(1, somniumGame.getOpenDeck().size()); // should be on the desk now
+        Assert.assertEquals(1, somniumGame.getOpenDeck().size());
+        Assert.assertFalse(somniumGame.getOpenDeck().getCards().contains(badOne));
     }
 }
