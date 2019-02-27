@@ -14,8 +14,8 @@ public class SomniumGameCommandLineInterpreter extends BaseCommandLineInterprete
     }
 
     @Override
-    public Set<Command<SomniumGame>> getCommands() {
-        Set<Command<SomniumGame>> commands = new HashSet<>();
+    public Set<Command> getCommands() {
+        Set<Command> commands = new HashSet<>();
         commands.add(new ShowCommand());
         if (getApplication().isTurnFailed()) {
             commands.add(new EndTurnCommand());
@@ -32,7 +32,7 @@ public class SomniumGameCommandLineInterpreter extends BaseCommandLineInterprete
             if (getApplication().hasCardsToDraw()) {
                 commands.add(new DrawCommand());
             }
-            if (getApplication().getOpenStack().size() > 0) {
+            if (getApplication().hasCardBeenDrawn()) {
                 commands.add(new EndTurnCommand());
             }
         }

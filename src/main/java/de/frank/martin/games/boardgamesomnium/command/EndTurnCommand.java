@@ -17,11 +17,13 @@ public class EndTurnCommand extends Command<SomniumGame> {
     @Override
     public Response execute(SomniumGame somniumGame, List<String> list) {
         somniumGame.endPlayersTurn();
-        //FIXME gehärt in die Anwendung, nicht hierhin
         if (!somniumGame.allCardsAreDrawn()) {
             SomniumPlayer player = somniumGame.getCurrent();
-            player.performAiTurn();
-            SomniumGamePrinter.printGame(System.out, somniumGame);
+            if (!player.isHuman()) {
+                player.performAiTurn();
+                SomniumGamePrinter.printGame(System.out, somniumGame);
+            }
+
         }
 
         return Response.success();

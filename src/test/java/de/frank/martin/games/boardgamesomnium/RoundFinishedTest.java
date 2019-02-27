@@ -7,43 +7,28 @@ public class RoundFinishedTest {
 
     @Test
     public void roundFinishedTest() {
-        SomniumGame somniumGame = new SomniumGame();
-        somniumGame.setup(new SomniumGameSetup());
-        somniumGame.initGame();
-
-        SomniumCard angelSeven = new SomniumCard(SomniumCard.CardColor.ANGEL, SomniumCard.CardType.NUMBER, 7);
-
-        somniumGame.getOpenStack().add(angelSeven);
+        SomniumGame somniumGame = new SomniumFactory().create();
+        somniumGame.getOpenDeck().add(PredefinedCards.ANGEL_SEVEN);
         somniumGame.checkFail();
         Assert.assertFalse(somniumGame.isTurnFailed());
     }
 
     @Test
     public void roundFinishedDoubleTest() {
-        SomniumGame somniumGame = new SomniumGame();
-        somniumGame.setup(new SomniumGameSetup());
-        somniumGame.initGame();
+        SomniumGame somniumGame = new SomniumFactory().create();
 
-        SomniumCard angelSeven = new SomniumCard(SomniumCard.CardColor.ANGEL, SomniumCard.CardType.NUMBER, 7);
-        SomniumCard angelSix = new SomniumCard(SomniumCard.CardColor.ANGEL, SomniumCard.CardType.NUMBER, 6);
-
-        somniumGame.getOpenStack().add(angelSeven);
-        somniumGame.getOpenStack().add(angelSix);
+        somniumGame.getOpenDeck().add(PredefinedCards.ANGEL_SEVEN);
+        somniumGame.getOpenDeck().add(PredefinedCards.ANGEL_SIX);
         somniumGame.checkFail();
         Assert.assertTrue(somniumGame.isTurnFailed());
     }
 
     @Test
     public void roundFinishedFoolTest() {
-        SomniumGame somniumGame = new SomniumGame();
-        somniumGame.setup(new SomniumGameSetup());
-        somniumGame.initGame();
+        SomniumGame somniumGame = new SomniumFactory().create();
 
-        SomniumCard angelSeven = new SomniumCard(SomniumCard.CardColor.ANGEL, SomniumCard.CardType.NUMBER, 7);
-        SomniumCard fool = new SomniumCard(SomniumCard.CardType.FOOL);
-
-        somniumGame.getOpenStack().add(angelSeven);
-        somniumGame.getOpenStack().add(fool);
+        somniumGame.getOpenDeck().add(PredefinedCards.ANGEL_SEVEN);
+        somniumGame.getOpenDeck().add(PredefinedCards.FOOL);
         somniumGame.checkFail();
         Assert.assertTrue(somniumGame.isTurnFailed());
     }

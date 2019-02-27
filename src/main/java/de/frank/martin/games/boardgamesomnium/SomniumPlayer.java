@@ -39,27 +39,27 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
                 if (delta > 7) {
                     break;
                 }
-                if (somniumGame.getOpenStack().size() < 2) {
+                if (somniumGame.getOpenDeck().size() < 2) {
                     somniumGame.drawCard();
                     continue;
                 }
-                if (delta < 6 && somniumGame.getOpenStack().size() < 3) {
+                if (delta < 6 && somniumGame.getOpenDeck().size() < 3) {
                     somniumGame.drawCard();
                     continue;
                 }
-                if (delta < 5 && somniumGame.getOpenStack().size() < 4) {
+                if (delta < 5 && somniumGame.getOpenDeck().size() < 4) {
                     somniumGame.drawCard();
                     continue;
                 }
-                if (delta < 4 && somniumGame.getOpenStack().size() < 5) {
+                if (delta < 4 && somniumGame.getOpenDeck().size() < 5) {
                     somniumGame.drawCard();
                     continue;
                 }
-                if (delta < 3 && somniumGame.getOpenStack().size() < 6) {
+                if (delta < 3 && somniumGame.getOpenDeck().size() < 6) {
                     somniumGame.drawCard();
                     continue;
                 }
-                if (delta < 2 && somniumGame.getOpenStack().size() < 7) {
+                if (delta < 2 && somniumGame.getOpenDeck().size() < 7) {
                     somniumGame.drawCard();
                     continue;
                 }
@@ -71,7 +71,7 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
 
     //@VisibleForTest
     List<SomniumCard> getBestCardsFromOpponent(SomniumGame somniumGame) {
-        List<SomniumCard.CardColor> remaining = somniumGame.getOpenStack().getRemainingColors();
+        List<SomniumCard.CardColor> remaining = somniumGame.getOpenDeck().getRemainingColors();
         SomniumPlayer victim = somniumGame.getVictim();
         return victim.getBestCards(remaining);
     }
@@ -95,15 +95,15 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
         return cards;
     }
 
-    private boolean hasOptions(Set<Command<SomniumGame>> commands) {
+    private boolean hasOptions(Set<Command> commands) {
         return hasOptionSteal(commands) || hasOptionDraw(commands);
     }
 
-    private boolean hasOptionSteal(Set<Command<SomniumGame>> commands) {
+    private boolean hasOptionSteal(Set<Command> commands) {
         return commands.stream().anyMatch(stealCommand::equals);
     }
 
-    private boolean hasOptionDraw(Set<Command<SomniumGame>> commands) {
+    private boolean hasOptionDraw(Set<Command> commands) {
         return commands.stream().anyMatch(drawCommand::equals);
     }
 
@@ -111,7 +111,7 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
     private int getDeltaFromOpenStack(SomniumGame somniumGame) {
         SomniumCardDeck currentCards = new SomniumCardDeck();
         int current = currentCards.getScore();
-        currentCards.addAll(somniumGame.getOpenStack());
+        currentCards.addAll(somniumGame.getOpenDeck());
         int after = currentCards.getScore();
         return after - current;
     }

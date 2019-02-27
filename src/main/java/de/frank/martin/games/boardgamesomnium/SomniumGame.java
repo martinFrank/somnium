@@ -15,14 +15,14 @@ import java.util.Set;
 import static de.frank.martin.games.boardgamesomnium.SomniumCard.CardType.FOOL;
 import static de.frank.martin.games.boardgamesomnium.SomniumCard.CardType.THIEF;
 
-public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements CommandLineInterpreter<SomniumGame> {
+public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements CommandLineInterpreter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SomniumGame.class);
 
     private final SomniumGameCommandLineInterpreter commandLineInterpreter;
-    private SomniumCardDeck closedStack = new SomniumCardDeck();
+    private SomniumCardDeck closedDeck = new SomniumCardDeck();
     private boolean isTurnFailed = false;
-    private SomniumCardDeck openStack = new SomniumCardDeck();
+    private SomniumCardDeck openDeck = new SomniumCardDeck();
 
     SomniumGame() {
         commandLineInterpreter = new SomniumGameCommandLineInterpreter(this);
@@ -31,12 +31,12 @@ public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements Command
     @Override
     public void endPlayersTurn(){
         if(!isTurnFailed()){
-            LOGGER.debug("{} has been added to {}",openStack, getCurrent().getName());
-            getCurrent().addCards(openStack);
+            LOGGER.debug("{} has been added to {}", openDeck, getCurrent().getName());
+            getCurrent().addCards(openDeck);
         }else{
-            LOGGER.debug("no cards for {}, the last card drawn was tainted, cards {} are lost", getCurrent().getName(),openStack);
+            LOGGER.debug("no cards for {}, the last card drawn was tainted, cards {} are lost", getCurrent().getName(), openDeck);
         }
-        openStack.clear();
+        openDeck.clear();
         isTurnFailed = false;
         super.endPlayersTurn();
     }
@@ -45,34 +45,39 @@ public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements Command
     public void initGame() {
         super.initGame();
         LOGGER.debug("init Game");
-        closedStack.init();
+        closedDeck.init();
         Collections.shuffle(getPlayers());
+        SomniumPlayer player = getCurrent();
+        LOGGER.debug("starting player is " + player.getName());
+        if (!player.isHuman()) {
+            player.performAiTurn();
+        }
     }
 
 
 
     public void drawCard() {
-        SomniumCard card = closedStack.drawCard();
+        SomniumCard card = closedDeck.drawCard();
         LOGGER.debug("{} has been drawn", card);
-        openStack.add(card);
+        openDeck.add(card);
         checkFail();
     }
 
     //@VisibleForTesting
     void checkFail() {
-        if (openStack.isCardOpen(FOOL)) {
+        if (openDeck.isCardOpen(FOOL)) {
             LOGGER.debug("FOOL has been drawn, your turn is over");
             isTurnFailed = true;
             return;
         }
-        if (!openStack.areColorsUnique()) {
+        if (!openDeck.areColorsUnique()) {
             LOGGER.debug("Duplicate card color has been drawn, your turn is over");
             isTurnFailed = true;
         }
     }
 
     boolean isThiefOpen() {
-        return openStack.isCardOpen(THIEF);
+        return openDeck.isCardOpen(THIEF);
     }
 
     boolean isTurnFailed() {
@@ -81,7 +86,7 @@ public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements Command
 
 
     public void steal(Optional<SomniumCard> card) {
-        openStack.removeLast(); //remove thief
+        openDeck.removeLast(); //remove thief
         if(card.isPresent()){
             SomniumPlayer victim = getVictim();
             Optional<SomniumCard> opt = victim.steal(card.get());
@@ -90,7 +95,7 @@ public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements Command
             } else {
                 LOGGER.debug("no valid card was stolen ...");
             }
-            openStack.add(opt.get());
+            openDeck.add(opt.get());
             checkFail();
 
         }
@@ -106,32 +111,36 @@ public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements Command
     }
 
     public boolean allCardsAreDrawn() {
-        return closedStack.isEmpty();
+        return closedDeck.isEmpty();
     }
 
-    SomniumCardDeck getOpenStack() {
-        return openStack;
+    SomniumCardDeck getOpenDeck() {
+        return openDeck;
     }
 
     SomniumCardDeck getClosedDeck() {
-        return closedStack;
+        return closedDeck;
     }
 
     boolean isGameOver() {
-        return closedStack.isEmpty() && openStack.isEmpty();
+        return closedDeck.isEmpty() && openDeck.isEmpty();
     }
 
     @Override
-    public Set<Command<SomniumGame>> getCommands() {
+    public Set<Command> getCommands() {
         return commandLineInterpreter.getCommands();
     }
 
     boolean hasCardsToDraw() {
-        return !closedStack.isEmpty();
+        return !closedDeck.isEmpty();
     }
 
     @Override
     public Response executeCommand(String identifier, List<String> parameter) {
         return commandLineInterpreter.executeCommand(identifier, parameter);
+    }
+
+    public boolean hasCardBeenDrawn() {
+        return getOpenDeck().size() > 0;
     }
 }
