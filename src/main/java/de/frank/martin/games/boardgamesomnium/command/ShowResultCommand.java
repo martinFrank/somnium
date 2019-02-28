@@ -9,13 +9,13 @@ import java.util.List;
 
 public class ShowResultCommand extends Command<SomniumGame> {
 
-    public ShowResultCommand() {
-        super("result");
+    public ShowResultCommand(SomniumGame somniumGame) {
+        super(somniumGame, "result");
     }
 
     @Override
-    public Response execute(SomniumGame somniumGame, List<String> list) {
-        SomniumGamePrinter.printResults(System.out, somniumGame);
+    public Response execute(List<String> list) {
+        SomniumGamePrinter.printResults(System.out, getApplication());
         return Response.success();
     }
 }

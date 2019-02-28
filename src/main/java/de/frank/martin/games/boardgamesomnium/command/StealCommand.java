@@ -12,18 +12,22 @@ import java.util.Optional;
 public class StealCommand extends Command<SomniumGame> {
 
 
+    public StealCommand(SomniumGame somniumGame) {
+        super(somniumGame, "steal");
+    }
 
     public StealCommand() {
-        super("steal");
+        this(null);
     }
 
 
     @Override
-    public Response execute(SomniumGame somniumGame, List<String> list) {
+    public Response execute(List<String> list) {
         try {
+            SomniumGame somniumGame = getApplication();
             SomniumCard.CardColor color = SomniumCard.CardColor.valueOf(list.get(0));
             Optional<SomniumCard> card = somniumGame.getVictim().getBestCard(color);
-            somniumGame.steal(card);
+            card.ifPresent(somniumGame::steal);
             SomniumGamePrinter.printGame(System.out, somniumGame);
             return Response.success();
         } catch (RuntimeException e) {

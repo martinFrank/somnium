@@ -9,7 +9,7 @@ public class RoundFinishedTest {
     public void roundFinishedTest() {
         SomniumGame somniumGame = new SomniumFactory().create();
         somniumGame.getOpenDeck().add(PredefinedCards.ANGEL_SEVEN);
-        somniumGame.checkFail();
+//        somniumGame.checkFail();
         Assert.assertFalse(somniumGame.isTurnFailed());
     }
 
@@ -19,7 +19,7 @@ public class RoundFinishedTest {
 
         somniumGame.getOpenDeck().add(PredefinedCards.ANGEL_SEVEN);
         somniumGame.getOpenDeck().add(PredefinedCards.ANGEL_SIX);
-        somniumGame.checkFail();
+//        somniumGame.checkFail();
         Assert.assertTrue(somniumGame.isTurnFailed());
     }
 
@@ -29,7 +29,7 @@ public class RoundFinishedTest {
 
         somniumGame.getOpenDeck().add(PredefinedCards.ANGEL_SEVEN);
         somniumGame.getOpenDeck().add(PredefinedCards.FOOL);
-        somniumGame.checkFail();
+//        somniumGame.checkFail();
         Assert.assertTrue(somniumGame.isTurnFailed());
     }
 }

@@ -1,13 +1,16 @@
 package de.frank.martin.games.boardgamesomnium;
 
-import de.elite.games.cli.Command;
+import de.elite.games.cli.CommandMapping;
 import de.frank.martin.games.boardgamelib.BasePlayer;
 import de.frank.martin.games.boardgamesomnium.command.DrawCommand;
 import de.frank.martin.games.boardgamesomnium.command.StealCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 public class SomniumPlayer extends BasePlayer<SomniumGame> {
 
@@ -28,38 +31,14 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
         somniumGame.startPlayersTurn();
         somniumGame.drawCard();
 
+
+        int cardCounter = 0;
         while (hasOptions(somniumGame.getCommands())) {
             if (hasOptionSteal(somniumGame.getCommands())) {
-                List<SomniumCard> bestCards = getBestCardsFromOpponent(somniumGame);
-                Collections.shuffle(bestCards);
-                Optional<SomniumCard> card = bestCards.isEmpty() ? Optional.empty() : Optional.of(bestCards.get(0));
-                somniumGame.steal(card);
+                stealCardFromOpponent(somniumGame);
             } else {
-                int delta = getDeltaFromOpenStack(somniumGame);
-                if (delta > 7) {
-                    break;
-                }
-                if (somniumGame.getOpenDeck().size() < 2) {
-                    somniumGame.drawCard();
-                    continue;
-                }
-                if (delta < 6 && somniumGame.getOpenDeck().size() < 3) {
-                    somniumGame.drawCard();
-                    continue;
-                }
-                if (delta < 5 && somniumGame.getOpenDeck().size() < 4) {
-                    somniumGame.drawCard();
-                    continue;
-                }
-                if (delta < 4 && somniumGame.getOpenDeck().size() < 5) {
-                    somniumGame.drawCard();
-                    continue;
-                }
-                if (delta < 3 && somniumGame.getOpenDeck().size() < 6) {
-                    somniumGame.drawCard();
-                    continue;
-                }
-                if (delta < 2 && somniumGame.getOpenDeck().size() < 7) {
+                if (wantsToDrawMoreCards(somniumGame, cardCounter)) {
+                    cardCounter++;
                     somniumGame.drawCard();
                     continue;
                 }
@@ -69,8 +48,28 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
         somniumGame.endPlayersTurn();
     }
 
+    private boolean wantsToDrawMoreCards(SomniumGame somniumGame, int cardCounter) {
+        int delta = getDeltaFromOpenStack(somniumGame);
+        int breakEven = 7 - cardCounter;
+        int amount = cardCounter + 2;
+        if (delta < breakEven && somniumGame.getOpenDeck().size() < amount) {
+            LOG.debug("myMethod: ");
+            return true;
+        }
+        return false;
+    }
+
+    private void stealCardFromOpponent(SomniumGame somniumGame) {
+        List<SomniumCard> bestCards = getBestCardsFromVictim(somniumGame);
+        Collections.shuffle(bestCards);
+        Optional<SomniumCard> card = bestCards.isEmpty() ? Optional.empty() : Optional.of(bestCards.get(0));
+        if (card.isPresent()) {
+            somniumGame.steal(card.get());
+        }
+    }
+
     //@VisibleForTest
-    List<SomniumCard> getBestCardsFromOpponent(SomniumGame somniumGame) {
+    List<SomniumCard> getBestCardsFromVictim(SomniumGame somniumGame) {
         List<SomniumCard.CardColor> remaining = somniumGame.getOpenDeck().getRemainingColors();
         SomniumPlayer victim = somniumGame.getVictim();
         return victim.getBestCards(remaining);
@@ -89,22 +88,21 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
                 if (bestOfColor.get().isEqualValuable(bestValue)) {
                     cards.add(bestOfColor.get());
                 }
-
             }
         }
         return cards;
     }
 
-    private boolean hasOptions(Set<Command> commands) {
+    private boolean hasOptions(CommandMapping commands) {
         return hasOptionSteal(commands) || hasOptionDraw(commands);
     }
 
-    private boolean hasOptionSteal(Set<Command> commands) {
-        return commands.stream().anyMatch(stealCommand::equals);
+    private boolean hasOptionSteal(CommandMapping commands) {
+        return commands.hasCommands(stealCommand.getIdentifier());
     }
 
-    private boolean hasOptionDraw(Set<Command> commands) {
-        return commands.stream().anyMatch(drawCommand::equals);
+    private boolean hasOptionDraw(CommandMapping commands) {
+        return commands.hasCommands(drawCommand.getIdentifier());
     }
 
 
@@ -119,7 +117,6 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
     void addCards(SomniumCardDeck openCards) {
         cards.addAll(openCards);
     }
-
 
     int getScore() {
         return cards.getScore();

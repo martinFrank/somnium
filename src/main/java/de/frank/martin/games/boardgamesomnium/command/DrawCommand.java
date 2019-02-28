@@ -9,14 +9,18 @@ import java.util.List;
 
 public class DrawCommand extends Command<SomniumGame> {
 
+    public DrawCommand(SomniumGame somniumGame) {
+        super(somniumGame, "draw");
+    }
+
     public DrawCommand() {
-        super("draw");
+        this(null);
     }
 
     @Override
-    public Response execute(SomniumGame somniumGame, List<String> list) {
-        somniumGame.drawCard();
-        SomniumGamePrinter.printGame(System.out, somniumGame);
+    public Response execute(List<String> list) {
+        getApplication().drawCard();
+        SomniumGamePrinter.printGame(System.out, getApplication());
         return Response.success();
     }
 }

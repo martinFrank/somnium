@@ -1,41 +1,54 @@
 package de.frank.martin.games.boardgamesomnium;
 
-import de.elite.games.cli.BaseCommandLineInterpreter;
-import de.elite.games.cli.Command;
+import de.elite.games.cli.CommandLineInterpreter;
+import de.elite.games.cli.CommandMapping;
+import de.elite.games.cli.DefaultCommandMapping;
 import de.frank.martin.games.boardgamesomnium.command.*;
 
-import java.util.HashSet;
-import java.util.Set;
+public class SomniumGameCommandLineInterpreter implements CommandLineInterpreter {
 
-public class SomniumGameCommandLineInterpreter extends BaseCommandLineInterpreter<SomniumGame> {
+    private final SomniumGame somniumGame;
+    private final EndTurnCommand endTurnCommand;
+    private final StealCommand stealCommand;
+    private final ShowCommand showCommand;
+    private final RestartCommand restartCommand;
+    private final ShowResultCommand showResultCommand;
+    private final DrawCommand drawCommand;
 
     SomniumGameCommandLineInterpreter(SomniumGame somniumGame) {
-        super(somniumGame);
+        super();
+        this.somniumGame = somniumGame;
+        endTurnCommand = new EndTurnCommand(somniumGame);
+        stealCommand = new StealCommand(somniumGame);
+        showCommand = new ShowCommand(somniumGame);
+        restartCommand = new RestartCommand(somniumGame);
+        showResultCommand = new ShowResultCommand(somniumGame);
+        drawCommand = new DrawCommand(somniumGame);
     }
 
     @Override
-    public Set<Command> getCommands() {
-        Set<Command> commands = new HashSet<>();
-        commands.add(new ShowCommand());
-        if (getApplication().isTurnFailed()) {
-            commands.add(new EndTurnCommand());
-            return commands;
+    public CommandMapping getCommands() {
+        final DefaultCommandMapping commandMapping = new DefaultCommandMapping();
+        commandMapping.add(showCommand);
+        if (somniumGame.isTurnFailed()) {
+            commandMapping.add(endTurnCommand);
+            return commandMapping;
         }
-        if (getApplication().isThiefOpen()) {
-            commands.add(new StealCommand());
-            return commands;
+        if (somniumGame.isThiefOpen()) {
+            commandMapping.add(stealCommand);
+            return commandMapping;
         }
-        if (getApplication().isGameOver()) {
-            commands.add(new RestartCommand());
-            commands.add(new ShowResultCommand());
+        if (somniumGame.isGameOver()) {
+            commandMapping.add(restartCommand);
+            commandMapping.add(showResultCommand);
         } else {
-            if (getApplication().hasCardsToDraw()) {
-                commands.add(new DrawCommand());
+            if (somniumGame.hasCardsToDraw()) {
+                commandMapping.add(drawCommand);
             }
-            if (getApplication().hasCardBeenDrawn()) {
-                commands.add(new EndTurnCommand());
+            if (somniumGame.hasCardBeenDrawn()) {
+                commandMapping.add(endTurnCommand);
             }
         }
-        return commands;
+        return commandMapping;
     }
 }

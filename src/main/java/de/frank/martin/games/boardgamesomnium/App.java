@@ -1,6 +1,6 @@
 package de.frank.martin.games.boardgamesomnium;
 
-import de.elite.games.cli.CommandLineInteraction;
+import de.elite.games.cli.CommandLineInterface;
 
 class App {
 
@@ -9,7 +9,7 @@ class App {
         somniumGame.setup(new SomniumGameSetup());
         somniumGame.initGame();
         SomniumGamePrinter.printGame(System.out, somniumGame);
-        CommandLineInteraction cli = new CommandLineInteraction(somniumGame, System.in, System.out);
+        CommandLineInterface cli = new CommandLineInterface(somniumGame, System.in, System.out);
         cli.start();
     }
 

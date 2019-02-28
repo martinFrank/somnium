@@ -10,15 +10,16 @@ import java.util.List;
 
 public class EndTurnCommand extends Command<SomniumGame> {
 
-    public EndTurnCommand() {
-        super("done");
+    public EndTurnCommand(SomniumGame somniumGame) {
+        super(somniumGame, "done");
     }
 
     @Override
-    public Response execute(SomniumGame somniumGame, List<String> list) {
+    public Response execute(List<String> list) {
+        SomniumGame somniumGame = getApplication();
         somniumGame.endPlayersTurn();
         if (!somniumGame.allCardsAreDrawn()) {
-            SomniumPlayer player = somniumGame.getCurrent();
+            SomniumPlayer player = somniumGame.getCurrentPlayer();
             if (!player.isHuman()) {
                 player.performAiTurn();
                 SomniumGamePrinter.printGame(System.out, somniumGame);

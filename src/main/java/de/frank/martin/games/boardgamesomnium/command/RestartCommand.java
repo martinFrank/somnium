@@ -10,12 +10,13 @@ import java.util.List;
 
 public class RestartCommand extends Command<SomniumGame> {
 
-    public RestartCommand() {
-        super("restart");
+    public RestartCommand(SomniumGame somniumGame) {
+        super(somniumGame, "restart");
     }
 
     @Override
-    public Response execute(SomniumGame somniumGame, List<String> list) {
+    public Response execute(List<String> list) {
+        SomniumGame somniumGame = getApplication();
         somniumGame.setup(new SomniumGameSetup());
         somniumGame.initGame();
         SomniumGamePrinter.printGame(System.out, somniumGame);
