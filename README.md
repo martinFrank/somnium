@@ -34,3 +34,4 @@ Somnium is a card game - the idea comes from the Mod 'Fall From Heaven II' for t
 
 ## requires 
  * [boardgamelib](https://github.com/martinFrank/boardgamelib)
+ * [cli](https://github.com/martinFrank/commandLineInterface)
