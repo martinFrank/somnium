@@ -38,5 +38,5 @@ Somnium is a card game - the idea comes from the Mod 'Fall From Heaven II' for t
 
 ## fun facts
  * the idea comes from the Civ4-Mod Fall From Heaven 2
- * the original idea was to tes computers AI (as is here=
+ * the original idea was to tes computers AI (as is here)
  * it's also a nice test for the cli
