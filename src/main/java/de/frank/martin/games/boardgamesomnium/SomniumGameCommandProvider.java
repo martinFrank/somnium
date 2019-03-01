@@ -1,11 +1,11 @@
 package de.frank.martin.games.boardgamesomnium;
 
-import de.elite.games.cli.CommandLineInterpreter;
-import de.elite.games.cli.CommandMapping;
-import de.elite.games.cli.DefaultCommandMapping;
+import de.elite.games.cli.CommandList;
+import de.elite.games.cli.CommandProvider;
+import de.elite.games.cli.DefaultCommandList;
 import de.frank.martin.games.boardgamesomnium.command.*;
 
-public class SomniumGameCommandLineInterpreter implements CommandLineInterpreter {
+public class SomniumGameCommandProvider implements CommandProvider {
 
     private final SomniumGame somniumGame;
     private final EndTurnCommand endTurnCommand;
@@ -15,7 +15,7 @@ public class SomniumGameCommandLineInterpreter implements CommandLineInterpreter
     private final ShowResultCommand showResultCommand;
     private final DrawCommand drawCommand;
 
-    SomniumGameCommandLineInterpreter(SomniumGame somniumGame) {
+    SomniumGameCommandProvider(SomniumGame somniumGame) {
         super();
         this.somniumGame = somniumGame;
         endTurnCommand = new EndTurnCommand(somniumGame);
@@ -27,8 +27,8 @@ public class SomniumGameCommandLineInterpreter implements CommandLineInterpreter
     }
 
     @Override
-    public CommandMapping getCommands() {
-        final DefaultCommandMapping commandMapping = new DefaultCommandMapping();
+    public CommandList getCommands() {
+        final DefaultCommandList commandMapping = new DefaultCommandList();
         commandMapping.add(showCommand);
         if (somniumGame.isTurnFailed()) {
             commandMapping.add(endTurnCommand);

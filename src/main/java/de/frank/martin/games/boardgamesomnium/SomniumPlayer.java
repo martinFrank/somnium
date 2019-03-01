@@ -1,6 +1,6 @@
 package de.frank.martin.games.boardgamesomnium;
 
-import de.elite.games.cli.CommandMapping;
+import de.elite.games.cli.CommandList;
 import de.frank.martin.games.boardgamelib.BasePlayer;
 import de.frank.martin.games.boardgamesomnium.command.DrawCommand;
 import de.frank.martin.games.boardgamesomnium.command.StealCommand;
@@ -63,9 +63,7 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
         List<SomniumCard> bestCards = getBestCardsFromVictim(somniumGame);
         Collections.shuffle(bestCards);
         Optional<SomniumCard> card = bestCards.isEmpty() ? Optional.empty() : Optional.of(bestCards.get(0));
-        if (card.isPresent()) {
-            somniumGame.steal(card.get());
-        }
+        card.ifPresent(somniumGame::steal);
     }
 
     //@VisibleForTest
@@ -93,15 +91,15 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
         return cards;
     }
 
-    private boolean hasOptions(CommandMapping commands) {
+    private boolean hasOptions(CommandList commands) {
         return hasOptionSteal(commands) || hasOptionDraw(commands);
     }
 
-    private boolean hasOptionSteal(CommandMapping commands) {
+    private boolean hasOptionSteal(CommandList commands) {
         return commands.hasCommands(stealCommand.getIdentifier());
     }
 
-    private boolean hasOptionDraw(CommandMapping commands) {
+    private boolean hasOptionDraw(CommandList commands) {
         return commands.hasCommands(drawCommand.getIdentifier());
     }
 
