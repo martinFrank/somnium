@@ -14,15 +14,12 @@ public class DrawTest {
         Assert.assertTrue(somniumGame.getCommands().hasCommands(PredefinedCommands.DRAW_COMMAND.getIdentifier()));
 
         openDeck.add(PredefinedCards.ANGEL_SEVEN);
-//        somniumGame.checkFail();
         Assert.assertTrue(somniumGame.getCommands().hasCommands(PredefinedCommands.DRAW_COMMAND.getIdentifier()));
 
         openDeck.add(PredefinedCards.DEMON_SEVEN);
-//        somniumGame.checkFail();
         Assert.assertTrue(somniumGame.getCommands().hasCommands(PredefinedCommands.DRAW_COMMAND.getIdentifier()));
 
         openDeck.add(PredefinedCards.ANGEL_SIX);
-//        somniumGame.checkFail();
         Assert.assertFalse(somniumGame.getCommands().hasCommands(PredefinedCommands.DRAW_COMMAND.getIdentifier()));
 
     }
