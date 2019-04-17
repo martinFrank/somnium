@@ -1,10 +1,15 @@
 package de.frank.martin.games.boardgamesomnium;
 
 import java.io.PrintStream;
+import java.util.Optional;
 
 import static de.frank.martin.games.boardgamesomnium.SomniumUtil.*;
 
 public class SomniumGamePrinter {
+
+    private SomniumGamePrinter() {
+
+    }
 
     public static void printGame(PrintStream out, SomniumGame somniumGame) {
         out.println();
@@ -36,7 +41,8 @@ public class SomniumGamePrinter {
 
     private static void printCardValues(PrintStream out, SomniumPlayer player) {
         for (SomniumCard.CardColor color : SomniumCard.CardColor.values()) {
-            int value = player.getBestCard(color).isPresent() ? player.getBestCard(color).get().getValue() : 0;
+            Optional<SomniumCard> card = player.getBestCard(color);
+            int value = card.isPresent() ? card.get().getValue() : 0;
             out.print("|" + format(Integer.toString(value)));
         }
         out.println("|");
@@ -61,7 +67,7 @@ public class SomniumGamePrinter {
         out.println("game over, score");
         somniumGame.getPlayers().stream().
                 map(player -> "player " + player.getName() + " has " + player.getScore() + " score").
-                forEach(System.out::println);
+                forEach(out::println);
     }
 
 

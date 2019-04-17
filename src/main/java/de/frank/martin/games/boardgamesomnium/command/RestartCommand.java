@@ -3,7 +3,6 @@ package de.frank.martin.games.boardgamesomnium.command;
 import de.elite.games.cli.Command;
 import de.elite.games.cli.Response;
 import de.frank.martin.games.boardgamesomnium.SomniumGame;
-import de.frank.martin.games.boardgamesomnium.SomniumGamePrinter;
 import de.frank.martin.games.boardgamesomnium.SomniumGameSetup;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class RestartCommand extends Command<SomniumGame> {
         SomniumGame somniumGame = getApplication();
         somniumGame.setup(new SomniumGameSetup());
         somniumGame.initGame();
-        SomniumGamePrinter.printGame(System.out, somniumGame);
+        ShowCommand.printGame(getApplication());
         return Response.success();
     }
 }

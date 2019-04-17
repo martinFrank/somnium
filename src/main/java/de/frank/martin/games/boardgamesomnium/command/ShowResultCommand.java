@@ -5,6 +5,7 @@ import de.elite.games.cli.Response;
 import de.frank.martin.games.boardgamesomnium.SomniumGame;
 import de.frank.martin.games.boardgamesomnium.SomniumGamePrinter;
 
+import java.io.PrintStream;
 import java.util.List;
 
 public class ShowResultCommand extends Command<SomniumGame> {
@@ -15,7 +16,7 @@ public class ShowResultCommand extends Command<SomniumGame> {
 
     @Override
     public Response execute(List<String> list) {
-        SomniumGamePrinter.printResults(System.out, getApplication());
+        SomniumGamePrinter.printResults(new PrintStream(System.out), getApplication());
         return Response.success();
     }
 }

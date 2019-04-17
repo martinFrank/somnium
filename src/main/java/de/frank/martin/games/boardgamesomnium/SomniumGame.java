@@ -43,7 +43,7 @@ public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements Command
         closedDeck.init();
         Collections.shuffle(getPlayers());
         SomniumPlayer player = getCurrentPlayer();
-        LOGGER.debug("starting player is " + player.getName());
+        LOGGER.debug("starting player is {}", player.getName());
         if (!player.isHuman()) {
             player.performAiTurn();
         }

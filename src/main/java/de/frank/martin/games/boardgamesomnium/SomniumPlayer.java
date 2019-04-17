@@ -75,20 +75,20 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
 
     private List<SomniumCard> getBestCards(List<SomniumCard.CardColor> allowedColors) {
         int bestValue = 0;
-        List<SomniumCard> cards = new ArrayList<>();
+        List<SomniumCard> bestCards = new ArrayList<>();
         for (SomniumCard.CardColor color : allowedColors) {
             Optional<SomniumCard> bestOfColor = getBestCard(color);
             if (bestOfColor.isPresent()) {
                 if (bestOfColor.get().isMoreValuableThan(bestValue)) {
-                    cards.clear();
+                    bestCards.clear();
                     bestValue = bestOfColor.get().getValue();
                 }
                 if (bestOfColor.get().isEqualValuable(bestValue)) {
-                    cards.add(bestOfColor.get());
+                    bestCards.add(bestOfColor.get());
                 }
             }
         }
-        return cards;
+        return bestCards;
     }
 
     private boolean hasOptions(CommandList commands) {
