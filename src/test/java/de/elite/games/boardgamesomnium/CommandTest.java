@@ -35,11 +35,6 @@ public class CommandTest {
             Assert.assertFalse(response.failed());
         }
 
-        Optional<Command> restartCommand = somniumGame.getCommands().findCommand("restart");
-        if (restartCommand.isPresent()) {
-            Response response = restartCommand.get().execute(Collections.emptyList());
-            Assert.assertFalse(response.failed());
-        }
 
     }
 
