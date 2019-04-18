@@ -21,18 +21,24 @@ public class CommandTest {
         if (drawCommand.isPresent()) {
             Response response = drawCommand.get().execute(Collections.emptyList());
             Assert.assertFalse(response.failed());
+        } else {
+            Assert.fail();
         }
 
         Optional<Command> showCommand = somniumGame.getCommands().findCommand("show");
         if (showCommand.isPresent()) {
             Response response = showCommand.get().execute(Collections.emptyList());
             Assert.assertFalse(response.failed());
+        } else {
+            Assert.fail();
         }
 
         Optional<Command> endTurnCommand = somniumGame.getCommands().findCommand("done");
         if (endTurnCommand.isPresent()) {
             Response response = endTurnCommand.get().execute(Collections.emptyList());
             Assert.assertFalse(response.failed());
+        } else {
+            Assert.fail();
         }
 
 
