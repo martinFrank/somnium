@@ -42,4 +42,27 @@ public class CommandTest {
         }
 
     }
+
+    @Test
+    public void stealCommandTest() {
+        SomniumGame somniumGame = new SomniumFactory().create();
+
+        SomniumCardDeck cardDeck = new SomniumCardDeck();
+        cardDeck.add(PredefinedCards.ANGEL_SEVEN);
+        cardDeck.add(PredefinedCards.CUP_ONE);
+
+        SomniumPlayer player = somniumGame.getCurrentPlayer();
+        SomniumPlayer victim = somniumGame.getVictim();
+        victim.addCards(cardDeck);
+
+        somniumGame.getOpenDeck().add(PredefinedCards.THIEF);
+
+        Optional<Command> stealCommand = somniumGame.getCommands().findCommand("steal");
+        Assert.assertTrue(stealCommand.isPresent());
+
+        Response response = stealCommand.get().execute(Collections.singletonList("ANGEL"));
+        Assert.assertFalse(response.failed());
+
+
+    }
 }
