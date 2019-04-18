@@ -19,7 +19,9 @@ public class PlayGameTest {
                 somniumGame.getCurrentPlayer().performAiTurn();
             }
         }
+        SomniumGamePrinter.printResults(System.out, somniumGame);
         Assert.assertTrue(somniumGame.isGameOver());
+
 
     }
 }
