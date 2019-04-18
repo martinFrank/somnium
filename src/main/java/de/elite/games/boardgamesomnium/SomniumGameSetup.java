@@ -1,17 +1,17 @@
-package de.frank.martin.games.boardgamesomnium;
+package de.elite.games.boardgamesomnium;
 
 import de.frank.martin.games.boardgamelib.BoardGameSetup;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestGameSetup implements BoardGameSetup<SomniumPlayer> {
+public class SomniumGameSetup implements BoardGameSetup<SomniumPlayer>  {
 
     @Override
     public List<SomniumPlayer> getPlayers() {
         ArrayList<SomniumPlayer> player = new ArrayList<>();
-        player.add(new SomniumPlayer("C 1", 0xFFFF00, false));
-        player.add(new SomniumPlayer("C 2", 0x0000FF, false));
+        player.add(new SomniumPlayer("YOU", 0xFFFF00, true));
+        player.add(new SomniumPlayer("CPU", 0x0000FF, false));
         return player;
     }
 

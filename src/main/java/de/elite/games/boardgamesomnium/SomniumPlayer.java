@@ -1,9 +1,9 @@
-package de.frank.martin.games.boardgamesomnium;
+package de.elite.games.boardgamesomnium;
 
+import de.elite.games.boardgamesomnium.command.DrawCommand;
+import de.elite.games.boardgamesomnium.command.StealCommand;
 import de.elite.games.cli.CommandList;
 import de.frank.martin.games.boardgamelib.BasePlayer;
-import de.frank.martin.games.boardgamesomnium.command.DrawCommand;
-import de.frank.martin.games.boardgamesomnium.command.StealCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

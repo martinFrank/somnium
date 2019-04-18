@@ -1,9 +1,9 @@
-package de.frank.martin.games.boardgamesomnium;
+package de.elite.games.boardgamesomnium;
 
 import java.io.PrintStream;
 import java.util.Optional;
 
-import static de.frank.martin.games.boardgamesomnium.SomniumUtil.*;
+import static de.elite.games.boardgamesomnium.SomniumUtil.*;
 
 public class SomniumGamePrinter {
 

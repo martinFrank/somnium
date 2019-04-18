@@ -1,10 +1,10 @@
-package de.frank.martin.games.boardgamesomnium;
+package de.elite.games.boardgamesomnium;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static de.frank.martin.games.boardgamesomnium.SomniumCard.CardType.*;
-import static de.frank.martin.games.boardgamesomnium.SomniumUtil.getMax;
+import static de.elite.games.boardgamesomnium.SomniumCard.CardType.*;
+import static de.elite.games.boardgamesomnium.SomniumUtil.getMax;
 
 public class SomniumCardDeck {
 

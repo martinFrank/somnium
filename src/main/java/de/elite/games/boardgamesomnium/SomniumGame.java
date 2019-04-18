@@ -1,4 +1,4 @@
-package de.frank.martin.games.boardgamesomnium;
+package de.elite.games.boardgamesomnium;
 
 import de.elite.games.cli.CommandList;
 import de.elite.games.cli.CommandProvider;
@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Collections;
 import java.util.Optional;
 
-import static de.frank.martin.games.boardgamesomnium.SomniumCard.CardType.FOOL;
-import static de.frank.martin.games.boardgamesomnium.SomniumCard.CardType.THIEF;
+import static de.elite.games.boardgamesomnium.SomniumCard.CardType.FOOL;
+import static de.elite.games.boardgamesomnium.SomniumCard.CardType.THIEF;
 
 public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements CommandProvider {
 

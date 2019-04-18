@@ -1,9 +1,9 @@
-package de.frank.martin.games.boardgamesomnium.command;
+package de.elite.games.boardgamesomnium.command;
 
+import de.elite.games.boardgamesomnium.SomniumCard;
+import de.elite.games.boardgamesomnium.SomniumGame;
 import de.elite.games.cli.Command;
 import de.elite.games.cli.Response;
-import de.frank.martin.games.boardgamesomnium.SomniumCard;
-import de.frank.martin.games.boardgamesomnium.SomniumGame;
 
 import java.util.List;
 import java.util.Optional;

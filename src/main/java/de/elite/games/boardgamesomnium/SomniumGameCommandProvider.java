@@ -1,9 +1,9 @@
-package de.frank.martin.games.boardgamesomnium;
+package de.elite.games.boardgamesomnium;
 
+import de.elite.games.boardgamesomnium.command.*;
 import de.elite.games.cli.CommandList;
 import de.elite.games.cli.CommandProvider;
 import de.elite.games.cli.DefaultCommandList;
-import de.frank.martin.games.boardgamesomnium.command.*;
 
 public class SomniumGameCommandProvider implements CommandProvider {
 

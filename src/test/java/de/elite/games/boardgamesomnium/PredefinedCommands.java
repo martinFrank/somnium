@@ -1,6 +1,6 @@
-package de.frank.martin.games.boardgamesomnium;
+package de.elite.games.boardgamesomnium;
 
-import de.frank.martin.games.boardgamesomnium.command.DrawCommand;
+import de.elite.games.boardgamesomnium.command.DrawCommand;
 
 public class PredefinedCommands {
 

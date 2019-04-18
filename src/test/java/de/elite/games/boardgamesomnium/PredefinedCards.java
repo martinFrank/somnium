@@ -1,4 +1,4 @@
-package de.frank.martin.games.boardgamesomnium;
+package de.elite.games.boardgamesomnium;
 
 public class PredefinedCards {
 
