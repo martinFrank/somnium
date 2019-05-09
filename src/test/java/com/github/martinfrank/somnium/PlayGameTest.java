@@ -24,6 +24,7 @@ public class PlayGameTest {
                 somniumGame.getCurrentPlayer().performAiTurn();
             }
         }
+        somniumGame.getCommands().findCommand("result").ifPresent(c -> c.execute(Collections.emptyList()));
         SomniumGamePrinter.printResults(System.out, somniumGame);
         Assert.assertTrue(somniumGame.isGameOver());
 
