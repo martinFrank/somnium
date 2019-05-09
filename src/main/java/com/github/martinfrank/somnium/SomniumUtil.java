@@ -4,7 +4,7 @@ import java.util.List;
 
 class SomniumUtil {
 
-    private final static int LENGTH_SHORT = 8;
+    private static final int LENGTH_SHORT = 8;
 
     private SomniumUtil(){
 

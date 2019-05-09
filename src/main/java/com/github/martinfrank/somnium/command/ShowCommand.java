@@ -15,7 +15,7 @@ public class ShowCommand extends Command<SomniumGame> {
     }
 
     static void printGame(SomniumGame somniumGame) {
-        SomniumGamePrinter.printGame(new PrintStream(System.out), somniumGame);
+        SomniumGamePrinter.printGame(new PrintStream(System.out), somniumGame);//NOSONAR - it's a console app
     }
 
     @Override

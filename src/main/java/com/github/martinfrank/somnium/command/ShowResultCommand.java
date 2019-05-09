@@ -16,7 +16,7 @@ public class ShowResultCommand extends Command<SomniumGame> {
 
     @Override
     public Response execute(List<String> list) {
-        SomniumGamePrinter.printResults(new PrintStream(System.out), getApplication());
+        SomniumGamePrinter.printResults(new PrintStream(System.out), getApplication());//NOSONAR - it's a console app
         return Response.success();
     }
 }
