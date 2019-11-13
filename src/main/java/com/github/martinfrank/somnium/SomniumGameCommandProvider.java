@@ -14,6 +14,8 @@ public class SomniumGameCommandProvider implements CommandProvider {
     private final RestartCommand restartCommand;
     private final ShowResultCommand showResultCommand;
     private final DrawCommand drawCommand;
+    private final HelpCommand helpCommand;
+    private final ExitCommand exitCommand;
 
     SomniumGameCommandProvider(SomniumGame somniumGame) {
         super();
@@ -24,12 +26,16 @@ public class SomniumGameCommandProvider implements CommandProvider {
         restartCommand = new RestartCommand(somniumGame);
         showResultCommand = new ShowResultCommand(somniumGame);
         drawCommand = new DrawCommand(somniumGame);
+        helpCommand = new HelpCommand(somniumGame);
+        exitCommand = new ExitCommand(somniumGame);
     }
 
     @Override
     public CommandList getCommands() {
         final DefaultCommandList commandMapping = new DefaultCommandList();
         commandMapping.add(showCommand);
+        commandMapping.add(helpCommand);
+        commandMapping.add(exitCommand);
         if (somniumGame.isTurnFailed()) {
             commandMapping.add(endTurnCommand);
             return commandMapping;

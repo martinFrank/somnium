@@ -1,6 +1,8 @@
 package com.github.martinfrank.somnium;
 
 import com.github.martinfrank.boardgamelib.BaseBoardGame;
+import com.github.martinfrank.cli.CommandInterpreter;
+import com.github.martinfrank.cli.CommandInterpreterProvider;
 import com.github.martinfrank.cli.CommandList;
 import com.github.martinfrank.cli.CommandProvider;
 import org.slf4j.Logger;
@@ -12,16 +14,18 @@ import java.util.Optional;
 import static com.github.martinfrank.somnium.SomniumCard.CardType.FOOL;
 import static com.github.martinfrank.somnium.SomniumCard.CardType.THIEF;
 
-public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements CommandProvider {
+public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements CommandProvider, CommandInterpreterProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SomniumGame.class);
 
     private final SomniumGameCommandProvider somniumGameCommandProvider;
+    private final CommandInterpreter commandInterpreter;
     private SomniumCardDeck closedDeck = new SomniumCardDeck();
     private SomniumCardDeck openDeck = new SomniumCardDeck();
 
     SomniumGame() {
         somniumGameCommandProvider = new SomniumGameCommandProvider(this);
+        commandInterpreter = new CommandInterpreter(somniumGameCommandProvider);
     }
 
     @Override
@@ -128,5 +132,10 @@ public class SomniumGame extends BaseBoardGame<SomniumPlayer> implements Command
 
     boolean hasCardBeenDrawn() {
         return getOpenDeck().size() > 0;
+    }
+
+    @Override
+    public CommandInterpreter getCommandInterpreter() {
+        return commandInterpreter;
     }
 }
