@@ -7,7 +7,7 @@ import com.github.martinfrank.somnium.command.*;
 
 public class SomniumGameCommandProvider implements CommandProvider {
 
-    private final SomniumGame somniumGame;
+    private final SomniumBoard board;
     private final EndTurnCommand endTurnCommand;
     private final StealCommand stealCommand;
     private final ShowCommand showCommand;
@@ -17,17 +17,17 @@ public class SomniumGameCommandProvider implements CommandProvider {
     private final HelpCommand helpCommand;
     private final ExitCommand exitCommand;
 
-    SomniumGameCommandProvider(SomniumGame somniumGame) {
+    SomniumGameCommandProvider(SomniumBoard board) {
         super();
-        this.somniumGame = somniumGame;
-        endTurnCommand = new EndTurnCommand(somniumGame);
-        stealCommand = new StealCommand(somniumGame);
-        showCommand = new ShowCommand(somniumGame);
-        restartCommand = new RestartCommand(somniumGame);
-        showResultCommand = new ShowResultCommand(somniumGame);
-        drawCommand = new DrawCommand(somniumGame);
-        helpCommand = new HelpCommand(somniumGame);
-        exitCommand = new ExitCommand(somniumGame);
+        this.board = board;
+        endTurnCommand = new EndTurnCommand(board);
+        stealCommand = new StealCommand(board);
+        showCommand = new ShowCommand(board);
+        restartCommand = new RestartCommand(board);
+        showResultCommand = new ShowResultCommand(board);
+        drawCommand = new DrawCommand(board);
+        helpCommand = new HelpCommand(board);
+        exitCommand = new ExitCommand(board);
     }
 
     @Override
@@ -36,22 +36,22 @@ public class SomniumGameCommandProvider implements CommandProvider {
         commandMapping.add(showCommand);
         commandMapping.add(helpCommand);
         commandMapping.add(exitCommand);
-        if (somniumGame.isTurnFailed()) {
+        if (board.isTurnFailed()) {
             commandMapping.add(endTurnCommand);
             return commandMapping;
         }
-        if (somniumGame.isThiefOpen()) {
+        if (board.isThiefOpen()) {
             commandMapping.add(stealCommand);
             return commandMapping;
         }
-        if (somniumGame.isGameOver()) {
+        if (board.isGameOver()) {
             commandMapping.add(restartCommand);
             commandMapping.add(showResultCommand);
         } else {
-            if (somniumGame.hasCardsToDraw()) {
+            if (board.hasCardsToDraw()) {
                 commandMapping.add(drawCommand);
             }
-            if (somniumGame.hasCardBeenDrawn()) {
+            if (board.hasCardBeenDrawn()) {
                 commandMapping.add(endTurnCommand);
             }
         }

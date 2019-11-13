@@ -1,9 +1,6 @@
 package com.github.martinfrank.somnium;
 
 import com.github.martinfrank.boardgamelib.BasePlayer;
-import com.github.martinfrank.cli.CommandList;
-import com.github.martinfrank.somnium.command.DrawCommand;
-import com.github.martinfrank.somnium.command.StealCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,11 +9,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class SomniumPlayer extends BasePlayer<SomniumGame> {
+public class SomniumPlayer extends BasePlayer<SomniumBoard> {
 
     private static final Logger LOG = LoggerFactory.getLogger(BasePlayer.class);
-    private final DrawCommand drawCommand = new DrawCommand();
-    private final StealCommand stealCommand = new StealCommand();
 
     private SomniumCardDeck cards = new SomniumCardDeck();
 
@@ -27,49 +22,49 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
     @Override
     public void performAiTurn() {
         LOG.debug("{} is working on its somnium move", getName());
-        SomniumGame somniumGame = getBoardGame();
-        somniumGame.startPlayersTurn();
-        somniumGame.drawCard();
+        SomniumBoard board = getBoardGame();
+        board.startPlayersTurn();
+        board.drawCard();
 
 
         int cardCounter = 0;
-        while (hasOptions(somniumGame.getCommands())) {
-            if (hasOptionSteal(somniumGame.getCommands())) {
-                stealCardFromOpponent(somniumGame);
+        while (hasOptions(board)) {
+            if (board.isThiefOpen()) {
+                stealCardFromOpponent(board);
             } else {
-                if (wantsToDrawMoreCards(somniumGame, cardCounter)) {
+                if (wantsToDrawMoreCards(board, cardCounter)) {
                     cardCounter++;
-                    somniumGame.drawCard();
+                    board.drawCard();
                     continue;
                 }
                 break;
             }
         }
-        somniumGame.endPlayersTurn();
+        board.endPlayersTurn();
     }
 
-    private boolean wantsToDrawMoreCards(SomniumGame somniumGame, int cardCounter) {
-        int delta = getDeltaFromOpenStack(somniumGame);
+    private boolean wantsToDrawMoreCards(SomniumBoard board, int cardCounter) {
+        int delta = getDeltaFromOpenStack(board);
         int breakEven = 7 - cardCounter;
         int amount = cardCounter + 2;
-        if (delta < breakEven && somniumGame.getOpenDeck().size() < amount) {
+        if (delta < breakEven && board.getOpenDeck().size() < amount) {
             LOG.debug("myMethod: ");
             return true;
         }
         return false;
     }
 
-    private void stealCardFromOpponent(SomniumGame somniumGame) {
-        List<SomniumCard> bestCards = getBestCardsFromVictim(somniumGame);
+    private void stealCardFromOpponent(SomniumBoard board) {
+        List<SomniumCard> bestCards = getBestCardsFromVictim(board);
         Collections.shuffle(bestCards);
         Optional<SomniumCard> card = bestCards.isEmpty() ? Optional.empty() : Optional.of(bestCards.get(0));
-        card.ifPresent(somniumGame::steal);
+        card.ifPresent(board::steal);
     }
 
     //@VisibleForTest
-    List<SomniumCard> getBestCardsFromVictim(SomniumGame somniumGame) {
-        List<SomniumCard.CardColor> remaining = somniumGame.getOpenDeck().getRemainingColors();
-        SomniumPlayer victim = somniumGame.getVictim();
+    List<SomniumCard> getBestCardsFromVictim(SomniumBoard board) {
+        List<SomniumCard.CardColor> remaining = board.getOpenDeck().getRemainingColors();
+        SomniumPlayer victim = board.getVictim();
         return victim.getBestCards(remaining);
     }
 
@@ -91,23 +86,14 @@ public class SomniumPlayer extends BasePlayer<SomniumGame> {
         return bestCards;
     }
 
-    private boolean hasOptions(CommandList commands) {
-        return hasOptionSteal(commands) || hasOptionDraw(commands);
+    private boolean hasOptions(SomniumBoard board) {
+        return board.isThiefOpen() || board.hasCardsToDraw();
     }
 
-    private boolean hasOptionSteal(CommandList commands) {
-        return commands.hasCommands(stealCommand.getIdentifier());
-    }
-
-    private boolean hasOptionDraw(CommandList commands) {
-        return commands.hasCommands(drawCommand.getIdentifier());
-    }
-
-
-    private int getDeltaFromOpenStack(SomniumGame somniumGame) {
+    private int getDeltaFromOpenStack(SomniumBoard board) {
         SomniumCardDeck currentCards = new SomniumCardDeck();
         int current = currentCards.getScore();
-        currentCards.addAll(somniumGame.getOpenDeck());
+        currentCards.addAll(board.getOpenDeck());
         int after = currentCards.getScore();
         return after - current;
     }

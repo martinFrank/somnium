@@ -14,8 +14,8 @@ public class CommandTest {
     public void testCommands() {
 
         SomniumGame somniumGame = new SomniumGame();
-        somniumGame.setup(new TestGameSetup());
-        somniumGame.initGame();
+        somniumGame.getBoard().setup(new TestGameSetup());
+        somniumGame.getBoard().initGame();
 
         Optional<Command> drawCommand = somniumGame.getCommands().findCommand("draw");
         if (drawCommand.isPresent()) {
@@ -52,11 +52,11 @@ public class CommandTest {
         cardDeck.add(PredefinedCards.ANGEL_SEVEN);
         cardDeck.add(PredefinedCards.CUP_ONE);
 
-        SomniumPlayer player = somniumGame.getCurrentPlayer();
-        SomniumPlayer victim = somniumGame.getVictim();
+        SomniumPlayer player = somniumGame.getBoard().getCurrentPlayer();
+        SomniumPlayer victim = somniumGame.getBoard().getVictim();
         victim.addCards(cardDeck);
 
-        somniumGame.getOpenDeck().add(PredefinedCards.THIEF);
+        somniumGame.getBoard().getOpenDeck().add(PredefinedCards.THIEF);
 
         Optional<Command> stealCommand = somniumGame.getCommands().findCommand("steal");
         Assert.assertTrue(stealCommand.isPresent());

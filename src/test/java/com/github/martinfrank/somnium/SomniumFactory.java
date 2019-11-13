@@ -13,8 +13,8 @@ public class SomniumFactory {
 
     SomniumGame create() {
         SomniumGame somniumGame = new SomniumGame();
-        somniumGame.setup(getTestSetup());
-        somniumGame.initGame();
+        somniumGame.getBoard().setup(getTestSetup());
+        somniumGame.getBoard().initGame();
         return somniumGame;
     }
 

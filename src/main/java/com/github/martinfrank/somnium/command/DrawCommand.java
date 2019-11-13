@@ -2,14 +2,14 @@ package com.github.martinfrank.somnium.command;
 
 import com.github.martinfrank.cli.Command;
 import com.github.martinfrank.cli.Response;
-import com.github.martinfrank.somnium.SomniumGame;
+import com.github.martinfrank.somnium.SomniumBoard;
 
 import java.util.List;
 
-public class DrawCommand extends Command<SomniumGame> {
+public class DrawCommand extends Command<SomniumBoard> {
 
-    public DrawCommand(SomniumGame somniumGame) {
-        super(somniumGame, "draw");
+    public DrawCommand(SomniumBoard board) {
+        super(board, "draw");
     }
 
     public DrawCommand() {

@@ -15,18 +15,18 @@ public class PlayGameTest {
     @Test
     public void playGameTest() {
         SomniumGame somniumGame = new SomniumGame();
-        somniumGame.setup(new TestGameSetup());
-        somniumGame.initGame();
-        while (!somniumGame.isGameOver()) {
-            if (somniumGame.getCurrentPlayer().isHuman()) {
-                somniumGame.endPlayersTurn();
+        somniumGame.getBoard().setup(new TestGameSetup());
+        somniumGame.getBoard().initGame();
+        while (!somniumGame.getBoard().isGameOver()) {
+            if (somniumGame.getBoard().getCurrentPlayer().isHuman()) {
+                somniumGame.getBoard().endPlayersTurn();
             } else {
-                somniumGame.getCurrentPlayer().performAiTurn();
+                somniumGame.getBoard().getCurrentPlayer().performAiTurn();
             }
         }
         somniumGame.getCommands().findCommand("result").ifPresent(c -> c.execute(Collections.emptyList()));
-        SomniumGamePrinter.printResults(System.out, somniumGame);
-        Assert.assertTrue(somniumGame.isGameOver());
+        SomniumGamePrinter.printResults(System.out, somniumGame.getBoard());
+        Assert.assertTrue(somniumGame.getBoard().isGameOver());
 
         Optional<Command> restartCommand = somniumGame.getCommands().findCommand("restart");
         if (restartCommand.isPresent()) {

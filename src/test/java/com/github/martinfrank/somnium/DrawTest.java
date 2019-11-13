@@ -9,7 +9,7 @@ public class DrawTest {
     public void drawTest() {
         SomniumGame somniumGame = new SomniumFactory().create();
 
-        SomniumCardDeck openDeck = somniumGame.getOpenDeck();
+        SomniumCardDeck openDeck = somniumGame.getBoard().getOpenDeck();
 
         Assert.assertTrue(somniumGame.getCommands().hasCommands(PredefinedCommands.DRAW_COMMAND.getIdentifier()));
 
@@ -30,7 +30,7 @@ public class DrawTest {
         SomniumGame somniumGame = new SomniumFactory().create();
 
         Assert.assertTrue(somniumGame.getCommands().hasCommands(PredefinedCommands.DRAW_COMMAND.getIdentifier()));
-        SomniumCardDeck closedDeck = somniumGame.getClosedDeck();
+        SomniumCardDeck closedDeck = somniumGame.getBoard().getClosedDeck();
         int amountCards = closedDeck.size();
         for (int i = 0; i < amountCards; i++) {
             closedDeck.removeLast();

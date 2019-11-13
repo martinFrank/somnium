@@ -2,9 +2,7 @@ package com.github.martinfrank.somnium;
 
 public class SomniumCard {
 
-
     public enum CardColor {ANGEL, SUN, WAND, CUP, TOWER, SWORD, DRAGON, PENTACLE, MOON, DEMON}
-
 
     boolean isMoreValuableThan(SomniumCard card) {
         if (card == null) {
